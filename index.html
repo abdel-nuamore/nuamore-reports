@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuamōre — Report Archive</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f9f9;
+    --surface: #ffffff;
+    --border: #ebebeb;
+    --border-light: #f3f3f3;
+    --sidebar: #fafafa;
+    --text: #111111;
+    --text-dim: #555555;
+    --text-muted: #aaaaaa;
+    --accent: #111111;
+    --brand: #dee3ef;
+    --brand-text: #5a7099;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --yellow: #92400e;
+    --yellow-bg: #fffbeb;
+    --red: #991b1b;
+    --red-bg: #fef2f2;
+    --radius: 6px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    display: flex;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 216px;
+    min-height: 100vh;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 20px 16px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .sidebar-logo-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    letter-spacing: 0.08em;
+  }
+
+  .sidebar-section {
+    padding: 14px 0 4px;
+  }
+
+  .sidebar-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 16px 6px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 16px;
+    font-size: 14px;
+    color: var(--text-dim);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.1s, color 0.1s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .sidebar-item:hover { background: #f0f0f0; color: var(--text); }
+  .sidebar-item.active { background: var(--brand); color: var(--text); font-weight: 500; }
+
+  .sidebar-item-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--border);
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  .sidebar-item.active .sidebar-item-count {
+    background: rgba(0,0,0,0.08);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: 216px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+
+  .topbar-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .topbar-right {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 28px 32px 80px;
+    flex: 1;
+  }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── MONTH SECTION ── */
+  .month-section {
+    margin-bottom: 32px;
+  }
+
+  .month-section.hidden { display: none; }
+
+  .month-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .month-name {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .month-summary {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ── REPORT TYPE BLOCK ── */
+  .report-type-block {
+    margin-bottom: 10px;
+  }
+
+  .report-type-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 14px 6px;
+    background: var(--border-light);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  /* ── REPORT TABLE ── */
+  .report-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    overflow: hidden;
+  }
+
+  .report-table th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .report-row {
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-light);
+    transition: background 0.1s;
+  }
+
+  .report-row:last-child { border-bottom: none; }
+  .report-row:hover { background: #f7f8fa; }
+
+  .report-row td {
+    padding: 12px 14px;
+    vertical-align: middle;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .report-row td:first-child { color: var(--text); font-weight: 500; }
+  .report-row td:last-child { text-align: right; }
+
+  .report-dates {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  /* STATUS */
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .pill-green { background: var(--green-bg); color: var(--green); }
+  .pill-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .pill-red { background: var(--red-bg); color: var(--red); }
+  .pill-empty { background: var(--border-light); color: var(--text-muted); }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-yellow { background: #d97706; }
+  .dot-red { background: #dc2626; }
+  .dot-empty { background: var(--text-muted); }
+
+  /* METRICS */
+  .metrics {
+    display: flex;
+    gap: 20px;
+  }
+
+  .m-item { display: flex; flex-direction: column; gap: 1px; }
+  .m-label { font-size: 10px; color: var(--text-muted); }
+  .m-value { font-size: 12.5px; font-weight: 500; color: var(--text); }
+
+  .arrow { font-size: 13px; color: var(--text-muted); transition: transform 0.15s, color 0.15s; }
+  .report-row:hover .arrow { color: var(--text); transform: translateX(3px); }
+
+  /* EMPTY ROW */
+  .empty-row td {
+    padding: 20px 14px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-style: italic;
+    cursor: default;
+    text-align: center;
+  }
+
+  .empty-row:hover { background: none !important; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 16px 32px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: 216px;
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name">Nuamōre</div>
+    <div class="sidebar-logo-sub">Report Archive</div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Year</div>
+    <button class="sidebar-item active" onclick="filterYear('2026', this)">
+      2026 <span class="sidebar-item-count" id="count-2026">0</span>
+    </button>
+    <button class="sidebar-item" onclick="filterYear('2025', this)">
+      2025 <span class="sidebar-item-count" id="count-2025">0</span>
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Type</div>
+    <button class="sidebar-item active-type" onclick="filterType('all', this)" id="type-all">All</button>
+    <button class="sidebar-item" onclick="filterType('weekly', this)" id="type-weekly">Weekly only</button>
+    <button class="sidebar-item" onclick="filterType('monthly', this)" id="type-monthly">Monthly only</button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Jump to month</div>
+    <div id="sidebar-months"></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Report Archive</div>
+    <div class="topbar-right" id="topbar-date"></div>
+  </div>
+
+  <div class="content">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Reports</div>
+        <div class="stat-value" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Weekly</div>
+        <div class="stat-value" id="stat-weekly">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Monthly</div>
+        <div class="stat-value" id="stat-monthly">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Latest</div>
+        <div class="stat-value" id="stat-latest" style="font-size:16px;padding-top:4px;">—</div>
+      </div>
+    </div>
+
+    <div id="archive"></div>
+  </div>
+</div>
+
+<footer>Nuamōre &nbsp;·&nbsp; Report Archive &nbsp;·&nbsp; Internal use only</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// REPORTS REGISTRY
+// Add a new entry here each week after uploading the HTML file.
+// ─────────────────────────────────────────────────────────────
+const reports = [
+  {
+    year: '2026',
+    month: 'June 2026',
+    monthOrder: '2026-06',
+    type: 'weekly',
+    title: 'Week 1 June',
+    dates: '2 Jun – 8 Jun 2026',
+    file: 'week-1-june-2026.html',
+    status: 'green',
+    filed: '29 Jun 2026',
+    metrics: [
+      { label: 'Tickets', value: '388' },
+      { label: 'CSAT', value: '4.88' },
+      { label: 'Return Rate', value: '2.66%' },
+    ]
+  },
+  // ── ADD NEW REPORTS ABOVE THIS LINE ──
+  // Template:
+  // {
+  //   year: '2026',
+  //   month: 'August 2026',
+  //   monthOrder: '2026-08',
+  //   type: 'weekly',          // 'weekly' or 'monthly'
+  //   title: 'Week 1 August',
+  //   dates: '28 Jul – 03 Aug 2026',
+  //   file: 'week-1-august-2026.html',
+  //   status: 'green',         // 'green' | 'yellow' | 'red' | 'empty'
+  //   filed: '04 Aug 2026',
+  //   metrics: [
+  //     { label: 'Revenue', value: '$X,XXX' },
+  //     { label: 'CSAT', value: 'X.XX' },
+  //     { label: 'ROAS', value: 'X.Xx' },
+  //   ]
+  // },
+];
+
+// All months to always show (newest first)
+const ALL_MONTHS_2026 = [
+  { label: 'December 2026', key: '2026-12', year: '2026' },
+  { label: 'November 2026', key: '2026-11', year: '2026' },
+  { label: 'October 2026',  key: '2026-10', year: '2026' },
+  { label: 'September 2026',key: '2026-09', year: '2026' },
+  { label: 'August 2026',   key: '2026-08', year: '2026' },
+  { label: 'July 2026',     key: '2026-07', year: '2026' },
+  { label: 'June 2026',     key: '2026-06', year: '2026' },
+  { label: 'May 2026',      key: '2026-05', year: '2026' },
+  { label: 'April 2026',    key: '2026-04', year: '2026' },
+  { label: 'March 2026',    key: '2026-03', year: '2026' },
+  { label: 'February 2026', key: '2026-02', year: '2026' },
+  { label: 'January 2026',  key: '2026-01', year: '2026' },
+];
+
+const ALL_MONTHS_2025 = [
+  { label: 'December 2025', key: '2025-12', year: '2025' },
+  { label: 'November 2025', key: '2025-11', year: '2025' },
+  { label: 'October 2025',  key: '2025-10', year: '2025' },
+  { label: 'September 2025',key: '2025-09', year: '2025' },
+  { label: 'August 2025',   key: '2025-08', year: '2025' },
+  { label: 'July 2025',     key: '2025-07', year: '2025' },
+  { label: 'June 2025',     key: '2025-06', year: '2025' },
+  { label: 'May 2025',      key: '2025-05', year: '2025' },
+  { label: 'April 2025',    key: '2025-04', year: '2025' },
+  { label: 'March 2025',    key: '2025-03', year: '2025' },
+  { label: 'February 2025', key: '2025-02', year: '2025' },
+  { label: 'January 2025',  key: '2025-01', year: '2025' },
+];
+
+let activeYear = '2026';
+let activeType = 'all';
+
+const statusConfig = {
+  green:  { pill: 'pill-green',  dot: 'dot-green',  label: 'On track' },
+  yellow: { pill: 'pill-yellow', dot: 'dot-yellow', label: 'Watch' },
+  red:    { pill: 'pill-red',    dot: 'dot-red',    label: 'Action needed' },
+  empty:  { pill: 'pill-empty',  dot: 'dot-empty',  label: 'No report yet' },
+};
+
+function filterYear(year, el) {
+  activeYear = year;
+  document.querySelectorAll('.sidebar-item').forEach(i => {
+    if (i.getAttribute('onclick') && i.getAttribute('onclick').includes('filterYear')) {
+      i.classList.remove('active');
+    }
+  });
+  el.classList.add('active');
+  render();
+}
+
+function filterType(type, el) {
+  activeType = type;
+  document.querySelectorAll('[id^="type-"]').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function render() {
+  const months = activeYear === '2026' ? ALL_MONTHS_2026 : ALL_MONTHS_2025;
+
+  // Update stats
+  const filtered = reports.filter(r => r.year === activeYear);
+  const weekly = filtered.filter(r => r.type === 'weekly');
+  const monthly = filtered.filter(r => r.type === 'monthly');
+  document.getElementById('stat-total').textContent = filtered.length;
+  document.getElementById('stat-weekly').textContent = weekly.length;
+  document.getElementById('stat-monthly').textContent = monthly.length;
+  document.getElementById('stat-latest').textContent = filtered.length ? filtered[0].title : '—';
+  document.getElementById('count-2026').textContent = reports.filter(r => r.year === '2026').length;
+  document.getElementById('count-2025').textContent = reports.filter(r => r.year === '2025').length;
+
+  // Sidebar jump links
+  const sidebarMonths = document.getElementById('sidebar-months');
+  sidebarMonths.innerHTML = months.map(m => {
+    const count = reports.filter(r => r.monthOrder === m.key).length;
+    return `<a class="sidebar-item" href="#month-${m.key}" style="font-size:13.5px;">
+      ${m.label.replace(' ' + m.year, '')}
+      ${count ? `<span class="sidebar-item-count">${count}</span>` : ''}
+    </a>`;
+  }).join('');
+
+  // Archive
+  const archive = document.getElementById('archive');
+  archive.innerHTML = months.map(m => {
+    const monthReports = reports.filter(r => r.monthOrder === m.key);
+    const monthlyReports = monthReports.filter(r => r.type === 'monthly');
+    const weeklyReports = monthReports.filter(r => r.type === 'weekly');
+
+    const showMonthly = activeType === 'all' || activeType === 'monthly';
+    const showWeekly = activeType === 'all' || activeType === 'weekly';
+
+    const monthlyBlock = showMonthly ? buildTypeBlock('Monthly Report', monthlyReports) : '';
+    const weeklyBlock = showWeekly ? buildTypeBlock('Weekly Reports', weeklyReports) : '';
+
+    const totalVisible = (showMonthly ? monthlyReports.length : 0) + (showWeekly ? weeklyReports.length : 0);
+    const countStr = [
+      monthlyReports.length ? monthlyReports.length + ' monthly' : '',
+      weeklyReports.length ? weeklyReports.length + ' weekly' : ''
+    ].filter(Boolean).join(' · ') || 'No reports yet';
+
+    return `
+      <div class="month-section" id="month-${m.key}">
+        <div class="month-heading">
+          <div class="month-name">${m.label}</div>
+          <div class="month-summary">${countStr}</div>
+        </div>
+        ${monthlyBlock}
+        ${weeklyBlock}
+      </div>`;
+  }).join('');
+}
+
+function buildTypeBlock(label, rpts) {
+  const rows = rpts.length
+    ? rpts.map(r => {
+        const s = statusConfig[r.status] || statusConfig.empty;
+        return `
+          <tr class="report-row" onclick="window.location='${r.file}'">
+            <td>
+              <div>${r.title}</div>
+              <div class="report-dates">${r.dates}</div>
+            </td>
+            <td>
+              <span class="status-pill ${s.pill}">
+                <span class="dot ${s.dot}"></span>
+                ${s.label}
+              </span>
+            </td>
+            <td>
+              <div class="metrics">
+                ${r.metrics.map(m => `
+                  <div class="m-item">
+                    <div class="m-label">${m.label}</div>
+                    <div class="m-value">${m.value}</div>
+                  </div>`).join('')}
+              </div>
+            </td>
+            <td style="font-size:13px;color:var(--text-muted);">${r.filed}</td>
+            <td><span class="arrow">→</span></td>
+          </tr>`;
+      }).join('')
+    : `<tr class="empty-row"><td colspan="5">No ${label.toLowerCase()} filed yet</td></tr>`;
+
+  return `
+    <div class="report-type-block">
+      <div class="report-type-label">${label}</div>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Report</th>
+            <th>Status</th>
+            <th>Key Metrics</th>
+            <th>Filed</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// Init
+document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-GB', {
+  weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+});
+
+render();
+</script>
+
+</body>
+</html>
