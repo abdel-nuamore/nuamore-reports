@@ -346,16 +346,6 @@
   </div>
 
   <div class="sidebar-section">
-    <div class="sidebar-label">Year</div>
-    <button class="sidebar-item active" onclick="filterYear('2026', this)">
-      2026 <span class="sidebar-item-count" id="count-2026">0</span>
-    </button>
-    <button class="sidebar-item" onclick="filterYear('2025', this)">
-      2025 <span class="sidebar-item-count" id="count-2025">0</span>
-    </button>
-  </div>
-
-  <div class="sidebar-section">
     <div class="sidebar-label">Type</div>
     <button class="sidebar-item active-type" onclick="filterType('all', this)" id="type-all">All</button>
     <button class="sidebar-item" onclick="filterType('weekly', this)" id="type-weekly">Weekly only</button>
@@ -416,6 +406,7 @@ const reports = [
     dates: '9 Jun – 15 Jun 2026',
     file: 'week-2-june-2026.html',
     status: 'yellow',
+    note: 'Refund rate doubled vs prior week',
     filed: '29 Jun 2026',
     metrics: [
       { label: 'Tickets', value: '697' },
@@ -432,6 +423,7 @@ const reports = [
     dates: '2 Jun – 8 Jun 2026',
     file: 'week-1-june-2026.html',
     status: 'green',
+    note: 'Best CSAT recorded',
     filed: '29 Jun 2026',
     metrics: [
       { label: 'Tickets', value: '388' },
@@ -448,6 +440,7 @@ const reports = [
     dates: '16 Jun – 22 Jun 2026',
     file: 'week-3-june-2026.html',
     status: 'red',
+    note: 'Order refund rate hit 13% — above benchmark',
     filed: '30 Jun 2026',
     metrics: [
       { label: 'Tickets', value: '446' },
@@ -464,6 +457,7 @@ const reports = [
     dates: '23 Jun – 29 Jun 2026',
     file: 'week-4-june-2026.html',
     status: 'yellow',
+    note: 'Order refund rate rising — 4th week in a row',
     filed: '30 Jun 2026',
     metrics: [
       { label: 'Tickets', value: '603' },
@@ -507,22 +501,6 @@ const ALL_MONTHS_2026 = [
   { label: 'January 2026',  key: '2026-01', year: '2026' },
 ];
 
-const ALL_MONTHS_2025 = [
-  { label: 'December 2025', key: '2025-12', year: '2025' },
-  { label: 'November 2025', key: '2025-11', year: '2025' },
-  { label: 'October 2025',  key: '2025-10', year: '2025' },
-  { label: 'September 2025',key: '2025-09', year: '2025' },
-  { label: 'August 2025',   key: '2025-08', year: '2025' },
-  { label: 'July 2025',     key: '2025-07', year: '2025' },
-  { label: 'June 2025',     key: '2025-06', year: '2025' },
-  { label: 'May 2025',      key: '2025-05', year: '2025' },
-  { label: 'April 2025',    key: '2025-04', year: '2025' },
-  { label: 'March 2025',    key: '2025-03', year: '2025' },
-  { label: 'February 2025', key: '2025-02', year: '2025' },
-  { label: 'January 2025',  key: '2025-01', year: '2025' },
-];
-
-let activeYear = '2026';
 let activeType = 'all';
 
 const statusConfig = {
@@ -532,17 +510,6 @@ const statusConfig = {
   empty:  { pill: 'pill-empty',  dot: 'dot-empty',  label: 'No report yet' },
 };
 
-function filterYear(year, el) {
-  activeYear = year;
-  document.querySelectorAll('.sidebar-item').forEach(i => {
-    if (i.getAttribute('onclick') && i.getAttribute('onclick').includes('filterYear')) {
-      i.classList.remove('active');
-    }
-  });
-  el.classList.add('active');
-  render();
-}
-
 function filterType(type, el) {
   activeType = type;
   document.querySelectorAll('[id^="type-"]').forEach(i => i.classList.remove('active'));
@@ -551,18 +518,16 @@ function filterType(type, el) {
 }
 
 function render() {
-  const months = activeYear === '2026' ? ALL_MONTHS_2026 : ALL_MONTHS_2025;
+  const months = ALL_MONTHS_2026;
 
   // Update stats
-  const filtered = reports.filter(r => r.year === activeYear);
+  const filtered = reports;
   const weekly = filtered.filter(r => r.type === 'weekly');
   const monthly = filtered.filter(r => r.type === 'monthly');
   document.getElementById('stat-total').textContent = filtered.length;
   document.getElementById('stat-weekly').textContent = weekly.length;
   document.getElementById('stat-monthly').textContent = monthly.length;
   document.getElementById('stat-latest').textContent = filtered.length ? filtered[0].title : '—';
-  document.getElementById('count-2026').textContent = reports.filter(r => r.year === '2026').length;
-  document.getElementById('count-2025').textContent = reports.filter(r => r.year === '2025').length;
 
   // Sidebar jump links
   const sidebarMonths = document.getElementById('sidebar-months');
@@ -579,7 +544,7 @@ function render() {
   archive.innerHTML = months.map(m => {
     const monthReports = reports.filter(r => r.monthOrder === m.key);
     const monthlyReports = monthReports.filter(r => r.type === 'monthly');
-    const weeklyReports = monthReports.filter(r => r.type === 'weekly');
+    const weeklyReports = monthReports.filter(r => r.type === 'weekly').sort((a, b) => parseStartDate(b.dates) - parseStartDate(a.dates));
 
     const showMonthly = activeType === 'all' || activeType === 'monthly';
     const showWeekly = activeType === 'all' || activeType === 'weekly';
@@ -605,6 +570,15 @@ function render() {
   }).join('');
 }
 
+function parseStartDate(datesStr) {
+  // e.g. "9 Jun – 15 Jun 2026" or "2 Jun – 8 Jun 2026"
+  const match = datesStr.match(/(\d{1,2})\s+(\w+).*?(\d{4})/);
+  if (!match) return 0;
+  const [, day, monthName, year] = match;
+  const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+  return new Date(parseInt(year), months[monthName.slice(0,3)] ?? 0, parseInt(day)).getTime();
+}
+
 function buildTypeBlock(label, rpts) {
   const rows = rpts.length
     ? rpts.map(r => {
@@ -618,7 +592,7 @@ function buildTypeBlock(label, rpts) {
             <td>
               <span class="status-pill ${s.pill}">
                 <span class="dot ${s.dot}"></span>
-                ${s.label}
+                ${r.note || s.label}
               </span>
             </td>
             <td>
