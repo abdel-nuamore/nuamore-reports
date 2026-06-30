@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuamōre — Week 2 June 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f9f9;
+    --surface: #ffffff;
+    --border: #ebebeb;
+    --border-light: #f3f3f3;
+    --sidebar: #fafafa;
+    --text: #111111;
+    --text-dim: #555555;
+    --text-muted: #aaaaaa;
+    --accent: #111111;
+    --brand: #dee3ef;
+    --brand-text: #5a7099;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --yellow: #92400e;
+    --yellow-bg: #fffbeb;
+    --red: #991b1b;
+    --red-bg: #fef2f2;
+    --radius: 6px;
+  }
+
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+  .sidebar { width: 216px; min-height: 100vh; background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; overflow-y: auto; }
+  .sidebar-logo { padding: 20px 16px 14px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo-name { font-size: 14px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+  .sidebar-logo-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.08em; }
+  .sidebar-section { padding: 14px 0 4px; }
+  .sidebar-label { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); padding: 0 16px 6px; }
+  .sidebar-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px; font-size: 13.5px; color: var(--text-dim); cursor: pointer; text-decoration: none; transition: background 0.1s, color 0.1s; border: none; background: none; width: 100%; text-align: left; }
+  .sidebar-item:hover { background: #f0f0f0; color: var(--text); }
+  .sidebar-item.active { background: var(--brand); color: var(--text); font-weight: 500; }
+  .sidebar-back { display: flex; align-items: center; gap: 6px; padding: 10px 16px; font-size: 13px; color: var(--brand-text); text-decoration: none; border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  .sidebar-back:hover { background: #f0f0f0; }
+
+  .main { margin-left: 216px; flex: 1; display: flex; flex-direction: column; }
+
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; height: 52px; position: sticky; top: 0; z-index: 40; }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-title { font-size: 15px; font-weight: 500; color: var(--text); }
+  .topbar-dates { font-size: 13px; color: var(--text-muted); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 20px; font-size: 13px; font-weight: 400; }
+  .pill-green { background: var(--green-bg); color: var(--green); }
+  .pill-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .pill-red { background: var(--red-bg); color: var(--red); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-yellow { background: #d97706; }
+  .dot-red { background: #dc2626; }
+
+  .content { padding: 28px 32px 80px; flex: 1; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 28px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-size: 22px; font-weight: 300; color: var(--text); letter-spacing: -0.01em; }
+  .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .stat-sub.up { color: #16a34a; }
+  .stat-sub.down { color: #dc2626; }
+
+  .section { margin-bottom: 28px; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .section-name { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+  .section-meta { font-size: 13px; color: var(--text-muted); }
+
+  .block { margin-bottom: 10px; }
+  .block-label { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 8px 14px 6px; background: var(--border-light); border: 1px solid var(--border); border-bottom: none; border-radius: var(--radius) var(--radius) 0 0; }
+  .block-table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); overflow: hidden; }
+  .block-table th { text-align: left; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 9px 14px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .block-table td { padding: 11px 14px; font-size: 14px; color: var(--text-dim); border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+  .block-table tr:last-child td { border-bottom: none; }
+  .block-table td:first-child { color: var(--text); font-weight: 500; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  .bar-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--border-light); }
+  .bar-row:last-child { border-bottom: none; }
+  .bar-label { font-size: 13px; color: var(--text); min-width: 170px; max-width: 170px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-label.narrow { min-width: 140px; max-width: 140px; }
+  .bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; background: var(--brand-text); }
+  .bar-fill.red { background: #dc2626; }
+  .bar-fill.green { background: var(--green); }
+  .bar-fill.dim { background: #c5cfe0; }
+  .bar-count { font-size: 13px; font-weight: 500; color: var(--text); min-width: 28px; text-align: right; }
+
+  .quote-block { padding: 12px 14px; border-left: 2px solid var(--brand); background: var(--surface); margin-bottom: 1px; font-size: 13px; color: var(--text-dim); font-style: italic; line-height: 1.5; }
+  .quote-author { font-style: normal; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  .alert { padding: 10px 14px; border-radius: var(--radius); font-size: 13px; margin-top: 10px; line-height: 1.5; }
+  .alert-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid #fde68a; }
+  .alert-red { background: var(--red-bg); color: var(--red); border: 1px solid #fecaca; }
+  .alert-green { background: var(--green-bg); color: #166534; border: 1px solid #bbf7d0; }
+  .alert-blue { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+  .bars-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+
+  footer { border-top: 1px solid var(--border); padding: 16px 32px; font-size: 13px; color: var(--text-muted); margin-left: 216px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name">Nuamōre</div>
+    <div class="sidebar-logo-sub">Report Archive</div>
+  </div>
+  <a class="sidebar-back" href="index.html">← Back to Archive</a>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Sections</div>
+    <a class="sidebar-item active" href="#overview">Overview</a>
+    <a class="sidebar-item" href="#tickets">Ticket Volume</a>
+    <a class="sidebar-item" href="#contacts">Why Customers Contact</a>
+    <a class="sidebar-item" href="#csat">CSAT</a>
+    <a class="sidebar-item" href="#returns">Returns</a>
+    <a class="sidebar-item" href="#refunds">Refunds</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Period</div>
+    <div style="padding: 4px 16px; font-size: 13px; color: var(--text-muted);">Jun 9–15, 2026</div>
+    <div style="padding: 4px 16px; font-size: 13px; color: var(--text-muted);">Week 2 of June</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">Week 2 June 2026</div>
+      <div class="topbar-dates">Jun 9–15, 2026</div>
+    </div>
+    <div class="topbar-right">
+      <span class="status-pill pill-yellow"><span class="dot dot-yellow"></span>Watch</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- STATS ROW -->
+    <div class="stats-row" id="overview">
+      <div class="stat-card">
+        <div class="stat-label">Tickets Created</div>
+        <div class="stat-value">697</div>
+        <div class="stat-sub down">▲ vs 388 prior week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CSAT Score</div>
+        <div class="stat-value">4.80</div>
+        <div class="stat-sub down">▼ vs 4.88 prior week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Return Rate</div>
+        <div class="stat-value">2.21%</div>
+        <div class="stat-sub up">↓ vs 2.66% prior week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Response</div>
+        <div class="stat-value">7h 01m</div>
+        <div class="stat-sub down">▲ vs 6h 20m prior week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Refunds</div>
+        <div class="stat-value">$8,037</div>
+        <div class="stat-sub down">▲ vs $3,974 prior week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Refund Rate</div>
+        <div class="stat-value">7.95%</div>
+        <div class="stat-sub down">▲ vs 3.33% prior week</div>
+      </div>
+    </div>
+
+    <!-- TICKET VOLUME -->
+    <div class="section" id="tickets">
+      <div class="section-header">
+        <div class="section-name">Ticket Volume & Channels</div>
+        <div class="section-meta">697 created · 793 closed</div>
+      </div>
+
+      <div class="two-col">
+        <div class="block">
+          <div class="block-label">Productivity</div>
+          <table class="block-table">
+            <thead><tr><th>Metric</th><th>This Week</th><th>Prior Week</th></tr></thead>
+            <tbody>
+              <tr><td>Created tickets</td><td>697</td><td>388</td></tr>
+              <tr><td>Closed tickets</td><td>793</td><td>453</td></tr>
+              <tr><td>Open tickets</td><td>98</td><td>102</td></tr>
+              <tr><td>Tickets replied</td><td>384</td><td>359</td></tr>
+              <tr><td>Messages sent</td><td>610</td><td>673</td></tr>
+              <tr><td>Messages received</td><td>1,100</td><td>891</td></tr>
+              <tr><td>Zero-touch tickets</td><td>427</td><td>109</td></tr>
+              <tr><td>One-touch rate</td><td>14.12%</td><td>20.97%</td></tr>
+              <tr><td>Avg response time</td><td>7h 01m</td><td>6h 20m</td></tr>
+              <tr><td>FRT</td><td>8h 37m</td><td>7h 31m</td></tr>
+              <tr><td>Resolution time</td><td>2d 03h</td><td>2d 08h</td></tr>
+              <tr><td>Messages per ticket</td><td>5.65</td><td>5.95</td></tr>
+            </tbody>
+          </table>
+          <div class="alert alert-yellow" style="margin-top:8px;">⚠ Ticket volume nearly doubled (+79%) vs prior week. Zero-touch tickets jumped from 109 to 427 — indicating a high volume of automated or notification-type contacts. Open backlog reduced slightly from 102 to 98.</div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Channel Breakdown</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Email</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">802</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram DM</span><div class="bar-track"><div class="bar-fill dim" style="width:5%"></div></div><span class="bar-count">38</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram Comment</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">15</span></div>
+            <div class="bar-row"><span class="bar-label">Facebook</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">19</span></div>
+            <div class="bar-row"><span class="bar-label">Facebook Messenger</span><div class="bar-track"><div class="bar-fill dim" style="width:0.5%"></div></div><span class="bar-count">4</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram Mention</span><div class="bar-track"><div class="bar-fill dim" style="width:0.25%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Facebook Mention</span><div class="bar-track"><div class="bar-fill dim" style="width:0.25%"></div></div><span class="bar-count">2</span></div>
+          </div>
+          <div class="alert alert-blue" style="margin-top:8px;">Email = 93% of all inbound workload. Instagram Comment volume tripled vs prior week (15 vs 5).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHY CUSTOMERS CONTACT -->
+    <div class="section" id="contacts">
+      <div class="section-header">
+        <div class="section-name">Why Customers Contact Us</div>
+        <div class="section-meta">209 classified · 399 unclassified</div>
+      </div>
+      <div class="alert alert-yellow" style="margin-bottom:12px;">⚠ <strong>63% of tickets have no topic assigned</strong> — agents are closing tickets without selecting a category field in Gorgias. The data below covers only the 209 classified tickets out of 632 total. This is a data quality issue that needs to be addressed: agents should select a topic on every ticket before closing. Also noted: Nutri-Peak subscription tickets are appearing in this export and have been excluded below.</div>
+
+      <div class="two-col">
+        <div class="block">
+          <div class="block-label">By Category</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Order Status</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">66</span></div>
+            <div class="bar-row"><span class="bar-label">Returns</span><div class="bar-track"><div class="bar-fill dim" style="width:33%"></div></div><span class="bar-count">22</span></div>
+            <div class="bar-row"><span class="bar-label">Product Inquiry</span><div class="bar-track"><div class="bar-fill dim" style="width:39%"></div></div><span class="bar-count">26</span></div>
+            <div class="bar-row"><span class="bar-label">Order Issue</span><div class="bar-track"><div class="bar-fill dim" style="width:18%"></div></div><span class="bar-count">12</span></div>
+            <div class="bar-row"><span class="bar-label">Shipping</span><div class="bar-track"><div class="bar-fill dim" style="width:20%"></div></div><span class="bar-count">13</span></div>
+            <div class="bar-row"><span class="bar-label">Refund Request</span><div class="bar-track"><div class="bar-fill dim" style="width:9%"></div></div><span class="bar-count">6</span></div>
+            <div class="bar-row"><span class="bar-label">Pre-Sale</span><div class="bar-track"><div class="bar-fill dim" style="width:9%"></div></div><span class="bar-count">6</span></div>
+            <div class="bar-row"><span class="bar-label">After-Sale Service</span><div class="bar-track"><div class="bar-fill dim" style="width:5%"></div></div><span class="bar-count">3</span></div>
+            <div class="bar-row"><span class="bar-label">Exchange</span><div class="bar-track"><div class="bar-fill dim" style="width:3%"></div></div><span class="bar-count">2</span></div>
+          </div>
+          <div style="padding:8px 14px;font-size:12px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);">Excludes: Social Media (25) · Feedback & Suggestions (12) · Collab (5) · Agent Follow-up (4)</div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Top Sub-Categories</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label narrow">Tracking Information</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">30</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Availability</span><div class="bar-track"><div class="bar-fill dim" style="width:70%"></div></div><span class="bar-count">21</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Missing Gift</span><div class="bar-track"><div class="bar-fill dim" style="width:40%"></div></div><span class="bar-count">12</span></div>
+            <div class="bar-row"><span class="bar-label narrow">No Longer Needed</span><div class="bar-track"><div class="bar-fill dim" style="width:43%"></div></div><span class="bar-count">13</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Cancellation Request</span><div class="bar-track"><div class="bar-fill dim" style="width:33%"></div></div><span class="bar-count">10</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Order Confirmation</span><div class="bar-track"><div class="bar-fill dim" style="width:33%"></div></div><span class="bar-count">10</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Edit Order</span><div class="bar-track"><div class="bar-fill dim" style="width:30%"></div></div><span class="bar-count">9</span></div>
+            <div class="bar-row"><span class="bar-label narrow">When will it ship?</span><div class="bar-track"><div class="bar-fill dim" style="width:23%"></div></div><span class="bar-count">7</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Delivery Failed</span><div class="bar-track"><div class="bar-fill dim" style="width:23%"></div></div><span class="bar-count">7</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Forgot to Apply Discount</span><div class="bar-track"><div class="bar-fill dim" style="width:20%"></div></div><span class="bar-count">6</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Instructions / Guide</span><div class="bar-track"><div class="bar-fill dim" style="width:17%"></div></div><span class="bar-count">5</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Too Small</span><div class="bar-track"><div class="bar-fill red" style="width:13%"></div></div><span class="bar-count">4</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Delivered Not Received</span><div class="bar-track"><div class="bar-fill dim" style="width:13%"></div></div><span class="bar-count">4</span></div>
+            <div class="bar-row"><span class="bar-label narrow">Shipping Policy</span><div class="bar-track"><div class="bar-fill dim" style="width:13%"></div></div><span class="bar-count">4</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSAT -->
+    <div class="section" id="csat">
+      <div class="section-header">
+        <div class="section-name">Customer Satisfaction</div>
+        <div class="section-meta">20 responses · 95.0% satisfaction</div>
+      </div>
+
+      <div class="three-col">
+        <div class="block">
+          <div class="block-label">Score Distribution</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label narrow">5 ★</span><div class="bar-track"><div class="bar-fill green" style="width:100%"></div></div><span class="bar-count">19</span></div>
+            <div class="bar-row"><span class="bar-label narrow">4 ★</span><div class="bar-track"><div class="bar-fill dim" style="width:0%"></div></div><span class="bar-count">0</span></div>
+            <div class="bar-row"><span class="bar-label narrow">3 ★</span><div class="bar-track"><div class="bar-fill dim" style="width:0%"></div></div><span class="bar-count">0</span></div>
+            <div class="bar-row"><span class="bar-label narrow">2 ★</span><div class="bar-track"><div class="bar-fill dim" style="width:0%"></div></div><span class="bar-count">0</span></div>
+            <div class="bar-row"><span class="bar-label narrow">1 ★</span><div class="bar-track"><div class="bar-fill red" style="width:5%"></div></div><span class="bar-count">1</span></div>
+          </div>
+          <div class="alert alert-green" style="margin-top:8px;">95.0% satisfaction — highest weekly satisfaction rate recorded. One 1-star from an unresolved issue.</div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">vs Prior Week</div>
+          <table class="block-table">
+            <thead><tr><th>Metric</th><th>This Week</th><th>Prior</th></tr></thead>
+            <tbody>
+              <tr><td>Avg Score</td><td><strong>4.80</strong></td><td>4.88</td></tr>
+              <tr><td>Satisfaction %</td><td><strong>95.0%</strong></td><td>94.1%</td></tr>
+              <tr><td>Responses</td><td>20</td><td>17</td></tr>
+              <tr><td>5-star rate</td><td><strong>95.0%</strong></td><td>94.1%</td></tr>
+              <tr><td>1–2 star rate</td><td><strong>5.0%</strong></td><td>0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Customer Quotes</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+            <div class="quote-block">"I absolutely love my watch — I'm so impressed by the quality. I recommend it 100%."<div class="quote-author">— Desiree Rodriguez (5★)</div></div>
+            <div class="quote-block">"Great. Karla could not have been more helpful."<div class="quote-author">— Colette O'Sullivan (5★)</div></div>
+            <div class="quote-block">"You guys did great! I was contacted in a timely manner."<div class="quote-author">— Kathleen Walsh (5★)</div></div>
+            <div class="quote-block">"Did not solve the issue."<div class="quote-author">— Brianne Terry (1★)</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RETURNS -->
+    <div class="section" id="returns">
+      <div class="section-header">
+        <div class="section-name">Return Analysis</div>
+        <div class="section-meta">70 requests · 2.21% return rate</div>
+      </div>
+
+      <div class="two-col">
+        <div class="block">
+          <div class="block-label">Return Reasons</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Other / Changed Mind</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">24</span></div>
+            <div class="bar-row"><span class="bar-label">Looks Different to Image</span><div class="bar-track"><div class="bar-fill red" style="width:67%"></div></div><span class="bar-count">16</span></div>
+            <div class="bar-row"><span class="bar-label">Too Small</span><div class="bar-track"><div class="bar-fill dim" style="width:46%"></div></div><span class="bar-count">11</span></div>
+            <div class="bar-row"><span class="bar-label">Too Big</span><div class="bar-track"><div class="bar-fill dim" style="width:33%"></div></div><span class="bar-count">8</span></div>
+            <div class="bar-row"><span class="bar-label">Arrived Too Late</span><div class="bar-track"><div class="bar-fill dim" style="width:21%"></div></div><span class="bar-count">5</span></div>
+            <div class="bar-row"><span class="bar-label">No Longer Wanted</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Defective</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Clasp / Size Issue</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Skin Reaction</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">1</span></div>
+          </div>
+          <div class="alert alert-yellow" style="margin-top:8px;">⚠ "Looks Different to Image on Site" is the #2 reason at 22.9% — nearly as large as "Too Small" this week. Product photography or description accuracy may need review.</div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">What Customers Actually Said</div>
+          <table class="block-table">
+            <thead><tr><th>Reason</th><th>Customer Descriptions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td style="white-space:nowrap;">Looks Different<br/>to Image (16)</td>
+                <td style="font-size:13px;color:var(--text-dim);">Too dainty / looks cheaper than expected · Quality is thinner than it looks · Color brighter than expected · Watch face looks much bigger in the photo · Edges are sharp, band difficult to open · Not elegant enough · Hands and face not bold enough to read · Item smaller than depicted · Looks cheap</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;">Too Small (11)</td>
+                <td style="font-size:13px;color:var(--text-dim);">Face much smaller than photos suggest · Links not large enough to go over wrist · Face smaller than anticipated · Too tight even after adding links · Watch not as seen in pictures</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;">Other (24)</td>
+                <td style="font-size:13px;color:var(--text-dim);">Didn't suit / preferred different colour · Ordered 2 and keeping one · Quality and weight didn't meet expectations · Can't open clasp — plastic covering it · Clasp very difficult to open · Date knob too small to set · Skin sensitivity / allergy · Coincidentally same watch as gift recipient · Wrong size for wrist</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;">Too Big (8)</td>
+                <td style="font-size:13px;color:var(--text-dim);">Band too wide for wrist · Too heavy · Can't adjust links to fit · Watch face too large on wrist</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;">Arrived Too Late (5)</td>
+                <td style="font-size:13px;color:var(--text-dim);">Needed for birthday gift — didn't arrive in time · Purchased an alternative · No longer required · Note: one customer also mentioned not receiving mystery gift</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;">Defective (1)</td>
+                <td style="font-size:13px;color:var(--text-dim);">Scratched on arrival (photos sent via email)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Return Rate Benchmark</div>
+        <table class="block-table">
+          <thead><tr><th>Metric</th><th>June 9–15</th><th>June 2–8</th><th>Benchmark</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Return rate</td><td><strong>2.21%</strong></td><td>2.66%</td><td>5–10%</td><td><span class="status-pill pill-green"><span class="dot dot-green"></span>Well below benchmark</span></td></tr>
+            <tr><td>"Looks Different to Image" share</td><td><strong>22.9%</strong></td><td>—</td><td>&lt;15%</td><td><span class="status-pill pill-yellow"><span class="dot dot-yellow"></span>Worth monitoring</span></td></tr>
+            <tr><td>"Too Small" share</td><td><strong>15.7%</strong></td><td>39.6%</td><td>&lt;20%</td><td><span class="status-pill pill-green"><span class="dot dot-green"></span>Within benchmark</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REFUNDS -->
+    <div class="section" id="refunds">
+      <div class="section-header">
+        <div class="section-name">Refund Summary</div>
+        <div class="section-meta">$8,037 · 77 orders · $101K revenue</div>
+      </div>
+
+      <div class="alert alert-red" style="margin-bottom:16px;">⚠ Refund rates this week are materially higher than June 2–8. Item refund rate doubled (5.47% vs 2.24%) and revenue refund rate more than doubled (7.80% vs 3.24%). June 10 and 12 were the heaviest refund days — $2,364 and $2,147 respectively. Monitor closely next week to determine if this is a one-off or a trend.</div>
+
+      <div class="block">
+        <div class="block-label">Refund Rates</div>
+        <table class="block-table">
+          <thead><tr><th>Metric</th><th>June 9–15</th><th>June 2–8</th><th>Benchmark</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>By items<div style="font-size:12px;color:var(--text-muted);font-weight:400;">105 items / 1,918 sold</div></td><td><strong>5.47%</strong></td><td>2.24%</td><td>2–5%</td><td><span class="status-pill pill-yellow"><span class="dot dot-yellow"></span>Above benchmark</span></td></tr>
+            <tr><td>vs Revenue (sales only)<div style="font-size:12px;color:var(--text-muted);font-weight:400;">$7,887 / $101,114</div></td><td><strong>7.80%</strong></td><td>3.24%</td><td>3–8%</td><td><span class="status-pill pill-yellow"><span class="dot dot-yellow"></span>Upper end of benchmark</span></td></tr>
+            <tr><td>vs Revenue (total incl. shipping + tax)<div style="font-size:12px;color:var(--text-muted);font-weight:400;">$8,037 / $101,114</div></td><td><strong>7.95%</strong></td><td>3.33%</td><td>3–8%</td><td><span class="status-pill pill-yellow"><span class="dot dot-yellow"></span>Upper end of benchmark</span></td></tr>
+            <tr><td>Order refund rate<div style="font-size:12px;color:var(--text-muted);font-weight:400;">77 orders / 715 total</div></td><td><strong>10.77%</strong></td><td>4.18%</td><td>5–10%</td><td><span class="status-pill pill-red"><span class="dot dot-red"></span>Above benchmark</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Most Refunded Items</div>
+        <div class="bars-block">
+          <div class="bar-row"><span class="bar-label">Toolkit / Watch Sizer</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">36</span></div>
+          <div class="bar-row"><span class="bar-label">Oceana - Gold Wave</span><div class="bar-track"><div class="bar-fill dim" style="width:56%"></div></div><span class="bar-count">20</span></div>
+          <div class="bar-row"><span class="bar-label">Mystery Gift</span><div class="bar-track"><div class="bar-fill dim" style="width:17%"></div></div><span class="bar-count">6</span></div>
+          <div class="bar-row"><span class="bar-label">Oceana - Gold Coast</span><div class="bar-track"><div class="bar-fill dim" style="width:17%"></div></div><span class="bar-count">6</span></div>
+          <div class="bar-row"><span class="bar-label">Oceana - Midnight</span><div class="bar-track"><div class="bar-fill dim" style="width:14%"></div></div><span class="bar-count">5</span></div>
+          <div class="bar-row"><span class="bar-label">Oceana - Silver Wave</span><div class="bar-track"><div class="bar-fill dim" style="width:11%"></div></div><span class="bar-count">4</span></div>
+          <div class="bar-row"><span class="bar-label">Solis - Gold</span><div class="bar-track"><div class="bar-fill dim" style="width:11%"></div></div><span class="bar-count">4</span></div>
+          <div class="bar-row"><span class="bar-label">Nua Bracelet - Gold</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">3</span></div>
+          <div class="bar-row"><span class="bar-label">Muse Watch</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">2</span></div>
+          <div class="bar-row"><span class="bar-label">Oceana - Blue Tide</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">2</span></div>
+        </div>
+        <div class="alert alert-yellow" style="margin-top:8px;">⚠ Toolkit leads at 36 refunded units — this has been the #1 refunded item two weeks in a row. Mystery Gift refunds (6) continue. Worth investigating whether the Toolkit checkout opt-in is driving accidental additions.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>Nuamōre &nbsp;·&nbsp; Week 2 June 2026 &nbsp;·&nbsp; Internal use only</footer>
+
+</body>
+</html>
