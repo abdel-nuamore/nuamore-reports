@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Nuamōre — Report Archive</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,7 +33,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     display: flex;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -76,7 +77,7 @@
   }
 
   .sidebar-label {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -89,7 +90,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 6px 16px;
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--text-dim);
     cursor: pointer;
     text-decoration: none;
@@ -150,7 +151,7 @@
 
   /* ── CONTENT ── */
   .content {
-    padding: 28px 32px 80px;
+    padding: 24px 28px 72px;
     flex: 1;
   }
 
@@ -166,11 +167,11 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
 
   .stat-label {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -178,7 +179,7 @@
   }
 
   .stat-value {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 300;
     color: var(--text);
     letter-spacing: -0.01em;
@@ -337,66 +338,59 @@
 </style>
 </head>
 <body>
-
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="sidebar-logo-name">Nuamōre</div>
-    <div class="sidebar-logo-sub">Report Archive</div>
-  </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label">Type</div>
-    <button class="sidebar-item active-type" onclick="filterType('all', this)" id="type-all">All</button>
-    <button class="sidebar-item" onclick="filterType('weekly', this)" id="type-weekly">Weekly only</button>
-    <button class="sidebar-item" onclick="filterType('monthly', this)" id="type-monthly">Monthly only</button>
-  </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label">Jump to month</div>
-    <div id="sidebar-months"></div>
-  </div>
+<div class="sidebar-logo">
+<div class="sidebar-logo-name">Nuamōre</div>
+<div class="sidebar-logo-sub">Report Archive</div>
+</div>
+<div class="sidebar-section">
+<div class="sidebar-label">Type</div>
+<button class="sidebar-item active-type" id="type-all" onclick="filterType('all', this)">All</button>
+<button class="sidebar-item" id="type-weekly" onclick="filterType('weekly', this)">Weekly only</button>
+<button class="sidebar-item" id="type-monthly" onclick="filterType('monthly', this)">Monthly only</button>
+</div>
+<div class="sidebar-section">
+<div class="sidebar-label">Jump to month</div>
+<div id="sidebar-months"></div>
+</div>
 </aside>
-
 <!-- MAIN -->
 <div class="main">
-  <div class="topbar">
-    <div class="topbar-title">Report Archive</div>
-    <div class="topbar-right" id="topbar-date"></div>
-  </div>
-
-  <div class="content">
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">Total Reports</div>
-        <div class="stat-value" id="stat-total">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Weekly</div>
-        <div class="stat-value" id="stat-weekly">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Monthly</div>
-        <div class="stat-value" id="stat-monthly">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Latest</div>
-        <div class="stat-value" id="stat-latest" style="font-size:16px;padding-top:4px;">—</div>
-      </div>
-    </div>
-
-    <div id="archive"></div>
-  </div>
+<div class="topbar">
+<div class="topbar-title">Report Archive</div>
+<div class="topbar-right" id="topbar-date"></div>
 </div>
-
-<footer>Nuamōre &nbsp;·&nbsp; Report Archive &nbsp;·&nbsp; Internal use only</footer>
-
+<div class="content">
+<div class="stats-row">
+<div class="stat-card">
+<div class="stat-label">Total Reports</div>
+<div class="stat-value" id="stat-total">0</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Weekly</div>
+<div class="stat-value" id="stat-weekly">0</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Monthly</div>
+<div class="stat-value" id="stat-monthly">0</div>
+</div>
+<div class="stat-card">
+<div class="stat-label">Latest</div>
+<div class="stat-value" id="stat-latest" style="font-size:16px;padding-top:4px;">—</div>
+</div>
+</div>
+<div id="archive"></div>
+</div>
+</div>
+<footer>Nuamōre  ·  Report Archive  ·  Internal use only</footer>
 <script>
 // ─────────────────────────────────────────────────────────────
 // REPORTS REGISTRY
 // Add a new entry here each week after uploading the HTML file.
 // ─────────────────────────────────────────────────────────────
 const reports = [
+
   {
     year: '2026',
     month: 'June 2026',
@@ -635,6 +629,5 @@ document.getElementById('topbar-date').textContent = new Date().toLocaleDateStri
 
 render();
 </script>
-
 </body>
 </html>
