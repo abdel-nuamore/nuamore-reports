@@ -399,19 +399,37 @@
 const reports = [
   {
     year: '2026',
-    month: 'June 2026',
-    monthOrder: '2026-06',
-    type: 'monthly',
-    title: 'June 2026 Executive Report',
-    dates: '1 Jun – 30 Jun 2026',
-    file: 'june-2026.html',
+    month: 'July 2026',
+    monthOrder: '2026-07',
+    type: 'weekly',
+    title: 'Week 2 July',
+    dates: '8 Jul – 14 Jul 2026',
+    file: 'week-2-july-2026.html',
     status: 'yellow',
-    note: 'Refund rate above target — cancellations & returns driving it',
-    filed: '02 Jul 2026',
+    note: 'Refund rate improved to 16.74%, still above benchmark',
+    filed: '21 Jul 2026',
     metrics: [
-      { label: 'Tickets', value: '2,088' },
-      { label: 'CSAT', value: '4.84' },
-      { label: 'Refund Rate', value: '7.06%' },
+      { label: 'Tickets', value: '594' },
+      { label: 'CSAT', value: '4.55' },
+      { label: 'Refund Rate', value: '16.74%' },
+    ]
+  },
+  // ── ADD NEW REPORTS ABOVE THIS LINE ──
+  {
+    year: '2026',
+    month: 'July 2026',
+    monthOrder: '2026-07',
+    type: 'weekly',
+    title: 'Week 1 July',
+    dates: '1 Jul – 7 Jul 2026',
+    file: 'week-1-july-2026.html',
+    status: 'red',
+    note: 'Refund rate spiked to 18.89% — action needed',
+    filed: '20 Jul 2026',
+    metrics: [
+      { label: 'Tickets', value: '298' },
+      { label: 'CSAT', value: '4.5' },
+      { label: 'Refund Rate', value: '18.89%' },
     ]
   },
   {
@@ -482,7 +500,6 @@ const reports = [
       { label: 'Order Refund Rate', value: '14.60%' },
     ]
   },
-  // ── ADD NEW REPORTS ABOVE THIS LINE ──
   // Template:
   // {
   //   year: '2026',
