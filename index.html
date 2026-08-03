@@ -182,6 +182,14 @@
     font-weight: 300;
     color: var(--text);
     letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .stat-value.small {
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* ── MONTH SECTION ── */
@@ -234,12 +242,16 @@
   /* ── REPORT TABLE ── */
   .report-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 0 0 var(--radius) var(--radius);
     overflow: hidden;
   }
+
+  .report-table th:nth-child(1), .report-table td:nth-child(1) { width: 260px; }
+  .report-table th:nth-child(3), .report-table td:nth-child(3) { width: 36px; }
 
   .report-table th {
     text-align: left;
@@ -267,6 +279,7 @@
     vertical-align: middle;
     color: var(--text-dim);
     font-size: 14px;
+    overflow: hidden;
   }
 
   .report-row td:first-child { color: var(--text); font-weight: 500; }
@@ -277,6 +290,7 @@
     color: var(--text-muted);
     font-weight: 400;
     margin-top: 1px;
+    white-space: nowrap;
   }
 
   /* STATUS */
@@ -304,12 +318,12 @@
   /* METRICS */
   .metrics {
     display: flex;
-    gap: 20px;
+    gap: 18px;
   }
 
-  .m-item { display: flex; flex-direction: column; gap: 1px; }
-  .m-label { font-size: 10px; color: var(--text-muted); }
-  .m-value { font-size: 12.5px; font-weight: 500; color: var(--text); }
+  .m-item { display: flex; flex-direction: column; gap: 1px; width: 118px; flex-shrink: 0; }
+  .m-label { font-size: 10px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .m-value { font-size: 12.5px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   .arrow { font-size: 13px; color: var(--text-muted); transition: transform 0.15s, color 0.15s; }
   .report-row:hover .arrow { color: var(--text); transform: translateX(3px); }
@@ -381,7 +395,7 @@
       </div>
       <div class="stat-card">
         <div class="stat-label">Latest</div>
-        <div class="stat-value" id="stat-latest" style="font-size:16px;padding-top:4px;">—</div>
+        <div class="stat-value small" id="stat-latest">—</div>
       </div>
     </div>
 
@@ -401,6 +415,60 @@ const reports = [
     year: '2026',
     month: 'July 2026',
     monthOrder: '2026-07',
+    type: 'monthly',
+    title: 'July 2026 Monthly',
+    dates: '1 Jul – 31 Jul 2026',
+    file: 'july-2026.html',
+    status: 'yellow',
+    note: 'Return/refund rates trending down through the month, still above benchmark',
+    filed: '02 Aug 2026',
+    metrics: [
+      { label: 'Tickets', value: '2,649' },
+      { label: 'CSAT', value: '4.72' },
+      { label: 'Returns', value: '182 (8.52%)' },
+      { label: 'Refund Rate', value: '12.25%' },
+      { label: 'Cash Refunded', value: '$32,211.57' },
+    ]
+  },
+  {
+    year: '2026',
+    month: 'July 2026',
+    monthOrder: '2026-07',
+    type: 'weekly',
+    title: 'Week 4 July',
+    dates: '22 Jul – 31 Jul 2026',
+    file: 'week-4-july-2026.html',
+    status: 'yellow',
+    note: '10-day window closing out the month; one chargeback won',
+    filed: '02 Aug 2026',
+    metrics: [
+      { label: 'Tickets', value: '1,090' },
+      { label: 'CSAT', value: '4.79' },
+      { label: 'Cash Refunded', value: '$7,917.68' },
+    ]
+  },
+  {
+    year: '2026',
+    month: 'July 2026',
+    monthOrder: '2026-07',
+    type: 'weekly',
+    title: 'Week 3 July',
+    dates: '15 Jul – 21 Jul 2026',
+    file: 'week-3-july-2026.html',
+    status: 'green',
+    note: 'Best week of the month — CSAT 4.92, lowest refunds so far',
+    filed: '02 Aug 2026',
+    metrics: [
+      { label: 'Tickets', value: '676' },
+      { label: 'CSAT', value: '4.92' },
+      { label: 'Cash Refunded', value: '$6,707.52' },
+    ]
+  },
+  // ── ADD NEW REPORTS ABOVE THIS LINE ──
+  {
+    year: '2026',
+    month: 'July 2026',
+    monthOrder: '2026-07',
     type: 'weekly',
     title: 'Week 2 July',
     dates: '8 Jul – 14 Jul 2026',
@@ -414,7 +482,6 @@ const reports = [
       { label: 'Refund Rate', value: '16.74%' },
     ]
   },
-  // ── ADD NEW REPORTS ABOVE THIS LINE ──
   {
     year: '2026',
     month: 'July 2026',
@@ -430,6 +497,25 @@ const reports = [
       { label: 'Tickets', value: '298' },
       { label: 'CSAT', value: '4.5' },
       { label: 'Refund Rate', value: '18.89%' },
+    ]
+  },
+  {
+    year: '2026',
+    month: 'June 2026',
+    monthOrder: '2026-06',
+    type: 'monthly',
+    title: 'June 2026 Monthly',
+    dates: '2 Jun – 29 Jun 2026',
+    file: 'june-monthly-2026.html',
+    status: 'yellow',
+    note: 'Order refund rate rose from 4.18% to 14.60% across the month',
+    filed: '03 Aug 2026',
+    metrics: [
+      { label: 'Tickets', value: '2,134' },
+      { label: 'CSAT', value: '4.81' },
+      { label: 'Returns', value: '227' },
+      { label: 'Refund Rate', value: '9.80%' },
+      { label: 'Cash Refunded', value: '$25,417' },
     ]
   },
   {
@@ -616,18 +702,11 @@ function parseStartDate(datesStr) {
 function buildTypeBlock(label, rpts) {
   const rows = rpts.length
     ? rpts.map(r => {
-        const s = statusConfig[r.status] || statusConfig.empty;
         return `
           <tr class="report-row" onclick="window.location='${r.file}'">
             <td>
               <div>${r.title}</div>
               <div class="report-dates">${r.dates}</div>
-            </td>
-            <td>
-              <span class="status-pill ${s.pill}">
-                <span class="dot ${s.dot}"></span>
-                ${r.note || s.label}
-              </span>
             </td>
             <td>
               <div class="metrics">
@@ -638,11 +717,10 @@ function buildTypeBlock(label, rpts) {
                   </div>`).join('')}
               </div>
             </td>
-            <td style="font-size:13px;color:var(--text-muted);">${r.filed}</td>
             <td><span class="arrow">→</span></td>
           </tr>`;
       }).join('')
-    : `<tr class="empty-row"><td colspan="5">No ${label.toLowerCase()} filed yet</td></tr>`;
+    : `<tr class="empty-row"><td colspan="3">No ${label.toLowerCase()} filed yet</td></tr>`;
 
   return `
     <div class="report-type-block">
@@ -651,9 +729,7 @@ function buildTypeBlock(label, rpts) {
         <thead>
           <tr>
             <th>Report</th>
-            <th>Status</th>
             <th>Key Metrics</th>
-            <th>Filed</th>
             <th></th>
           </tr>
         </thead>
