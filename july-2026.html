@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuamōre — July 2026 Monthly</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f9f9;
+    --surface: #ffffff;
+    --border: #ebebeb;
+    --border-light: #f3f3f3;
+    --sidebar: #fafafa;
+    --text: #111111;
+    --text-dim: #555555;
+    --text-muted: #aaaaaa;
+    --accent: #111111;
+    --brand: #dee3ef;
+    --brand-text: #5a7099;
+    --green: #16a34a;
+    --green-bg: #f0fdf4;
+    --yellow: #92400e;
+    --yellow-bg: #fffbeb;
+    --red: #991b1b;
+    --red-bg: #fef2f2;
+    --radius: 6px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 15px;
+    display: flex;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 216px;
+    min-height: 100vh;
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    overflow-y: auto;
+  }
+  .sidebar-logo { padding: 20px 16px 14px; border-bottom: 1px solid var(--border); }
+  .sidebar-logo-name { font-size: 14px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text); }
+  .sidebar-logo-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.08em; }
+  .sidebar-section { padding: 14px 0 4px; }
+  .sidebar-label { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); padding: 0 16px 6px; }
+  .sidebar-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 16px; font-size: 13.5px; color: var(--text-dim);
+    cursor: pointer; text-decoration: none;
+    transition: background 0.1s, color 0.1s;
+    border: none; background: none; width: 100%; text-align: left;
+  }
+  .sidebar-item:hover { background: #f0f0f0; color: var(--text); }
+  .sidebar-item.active { background: var(--brand); color: var(--text); font-weight: 500; }
+  .sidebar-back {
+    display: flex; align-items: center; gap: 6px;
+    padding: 10px 16px; font-size: 13px; color: var(--brand-text);
+    text-decoration: none; border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .sidebar-back:hover { background: #f0f0f0; }
+
+  /* ── MAIN ── */
+  .main { margin-left: 216px; flex: 1; display: flex; flex-direction: column; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 52px; position: sticky; top: 0; z-index: 40;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-title { font-size: 15px; font-weight: 500; color: var(--text); }
+  .topbar-dates { font-size: 13px; color: var(--text-muted); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 2px 9px; border-radius: 20px; font-size: 13px; font-weight: 400;
+  }
+  .pill-green { background: var(--green-bg); color: var(--green); }
+  .pill-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .pill-red { background: var(--red-bg); color: var(--red); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--green); }
+  .dot-yellow { background: #d97706; }
+  .dot-red { background: #dc2626; }
+
+  /* ── CONTENT ── */
+  .content { padding: 28px 32px 80px; flex: 1; }
+
+  /* ── STATS ROW ── */
+  .stats-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 28px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-size: 22px; font-weight: 300; color: var(--text); letter-spacing: -0.01em; }
+  .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+  .stat-sub.up { color: #16a34a; }
+  .stat-sub.down { color: #dc2626; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 28px; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+  .section-name { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+  .section-meta { font-size: 13px; color: var(--text-muted); }
+
+  /* ── BLOCKS ── */
+  .block { margin-bottom: 10px; }
+  .block-label {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-muted); padding: 8px 14px 6px;
+    background: var(--border-light); border: 1px solid var(--border);
+    border-bottom: none; border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .block-table {
+    width: 100%; border-collapse: collapse; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius); overflow: hidden;
+  }
+  .block-table th {
+    text-align: left; font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 9px 14px; border-bottom: 1px solid var(--border); background: var(--surface);
+  }
+  .block-table td { padding: 11px 14px; font-size: 14px; color: var(--text-dim); border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+  .block-table tr:last-child td { border-bottom: none; }
+  .block-table td:first-child { color: var(--text); font-weight: 500; }
+  .block-table td.right { text-align: right; }
+  .block-table td.muted { color: var(--text-muted); font-size: 13px; }
+
+  /* ── TWO COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  /* ── BAR ── */
+  .bar-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--border-light); }
+  .bar-row:last-child { border-bottom: none; }
+  .bar-label { font-size: 13px; color: var(--text); min-width: 230px; max-width: 230px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-label.narrow { min-width: 140px; max-width: 140px; }
+  .bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; background: var(--brand-text); }
+  .bar-fill.red { background: #dc2626; }
+  .bar-fill.green { background: var(--green); }
+  .bar-fill.dim { background: #c5cfe0; }
+  .bar-count { font-size: 13px; font-weight: 500; color: var(--text); min-width: 28px; text-align: right; }
+
+  /* ── QUOTE ── */
+  .quote-block { padding: 12px 14px; border-left: 2px solid var(--brand); background: var(--surface); margin-bottom: 1px; font-size: 13px; color: var(--text-dim); font-style: italic; line-height: 1.5; }
+  .quote-author { font-style: normal; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .quote-block.negative { border-left-color: #dc2626; }
+
+  /* ── ALERT ── */
+  .alert { padding: 10px 14px; border-radius: var(--radius); font-size: 13px; margin-top: 10px; line-height: 1.5; }
+  .alert-yellow { background: var(--yellow-bg); color: var(--yellow); border: 1px solid #fde68a; }
+  .alert-green { background: var(--green-bg); color: #166534; border: 1px solid #bbf7d0; }
+  .alert-blue { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+  .alert-red { background: var(--red-bg); color: var(--red); border: 1px solid #fecaca; }
+
+  /* ── INLINE BAR WRAPPER ── */
+  .bars-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 16px 32px;
+    font-size: 13px; color: var(--text-muted); margin-left: 216px;
+  }
+</style>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name">Nuamōre</div>
+    <div class="sidebar-logo-sub">Report Archive</div>
+  </div>
+  <a class="sidebar-back" href="index.html">← Back to Archive</a>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Sections</div>
+    <a class="sidebar-item active" href="#overview">Overview</a>
+    <a class="sidebar-item" href="#weekly">Week-by-Week</a>
+    <a class="sidebar-item" href="#tickets">Ticket Volume</a>
+    <a class="sidebar-item" href="#contacts">Why Customers Contact</a>
+    <a class="sidebar-item" href="#csat">CSAT</a>
+    <a class="sidebar-item" href="#returns">Returns</a>
+    <a class="sidebar-item" href="#refunds">Refunds</a>
+    <a class="sidebar-item" href="#promo">Free Order Loss</a>
+    <a class="sidebar-item" href="#disputes">Disputes</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Period</div>
+    <div style="padding: 4px 16px; font-size: 13px; color: var(--text-muted);">Jul 1–31, 2026</div>
+    <div style="padding: 4px 16px; font-size: 13px; color: var(--text-muted);">Monthly Rollup</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-title">July 2026 Monthly Report</div>
+      <div class="topbar-dates">Jul 1–31, 2026</div>
+    </div>
+    <div class="topbar-right">
+      <span class="status-pill pill-yellow"><span class="dot dot-yellow"></span>Watch</span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- STATS ROW -->
+    <div class="stats-row" id="overview">
+      <div class="stat-card">
+        <div class="stat-label">Tickets Created</div>
+        <div class="stat-value">2,649</div>
+        <div class="stat-sub">1,067 customer-initiated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CSAT Score</div>
+        <div class="stat-value">4.72</div>
+        <div class="stat-sub down">↓ vs 4.84 prior period</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Return Rate</div>
+        <div class="stat-value">8.52%</div>
+        <div class="stat-sub">182 of 2,137 orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Refund Rate</div>
+        <div class="stat-value" style="color:#d97706;">12.25%</div>
+        <div class="stat-sub">253 orders / 2,065 revenue orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cash Refunded</div>
+        <div class="stat-value">$32,211.57</div>
+        <div class="stat-sub">270 transactions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Chargebacks</div>
+        <div class="stat-value">6</div>
+        <div class="stat-sub">$905.62 · 4 lost, 1 won, 1 pending</div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow" style="margin:-14px 0 24px;">
+      <strong>July closed with refund and return rates still above benchmark, but both trending down through the month.</strong> Weekly cash refunded ran $8,904 → $8,682 → $6,708 → $7,918 (Week 4 is a 10-day window). CSAT held in the mid-4.5–4.9 range all month. The clearest, most consistent signal across all four weeks: <strong>"Too Small" is the single largest return reason every week</strong> (92 of 201 categorized mentions, 46% of the month) — see Returns below for the detail.
+    </div>
+
+    <!-- WEEK BY WEEK -->
+    <div class="section" id="weekly">
+      <div class="section-header">
+        <div class="section-name">Week-by-Week Trend</div>
+        <div class="section-meta">4 weeks · Jul 1–31</div>
+      </div>
+      <table class="block-table">
+        <thead><tr><th>Metric</th><th>Wk1 (Jul 1–7)</th><th>Wk2 (Jul 8–14)</th><th>Wk3 (Jul 15–21)</th><th>Wk4 (Jul 22–31, 10d)</th></tr></thead>
+        <tbody>
+          <tr><td>Tickets created</td><td>298</td><td>594</td><td>676</td><td>1,090</td></tr>
+          <tr><td>CSAT</td><td>4.5</td><td>4.55</td><td>4.92</td><td>4.79</td></tr>
+          <tr><td>Return requests</td><td>48</td><td>45</td><td>27</td><td>62</td></tr>
+          <tr><td>Cash refunded</td><td>$8,904.50</td><td>$8,681.87</td><td>$6,707.52</td><td>$7,917.68</td></tr>
+          <tr><td>Free orders</td><td>17</td><td>19</td><td>15</td><td>21</td></tr>
+          <tr><td>Chargebacks (Shopify Payments)</td><td>1 lost</td><td>2 lost/pending</td><td>2 lost</td><td>1 won</td></tr>
+        </tbody>
+      </table>
+      <div class="section-meta" style="font-size:12px;margin-top:6px;">Free order counts here use the strict "$0 revenue order" definition from this batch's export; Week 1–2 figures shared earlier in the month used a slightly broader definition (also including partially-discounted orders with some customer payment), so they may not match those weekly reports exactly.</div>
+    </div>
+
+    <!-- TICKET VOLUME -->
+    <div class="section" id="tickets">
+      <div class="section-header">
+        <div class="section-name">Ticket Volume & Channels</div>
+        <div class="section-meta">2,649 created · 2,623 closed in July</div>
+      </div>
+
+      <div class="two-col">
+        <div class="block">
+          <div class="block-label">CX Dashboard (Gorgias, full month)</div>
+          <table class="block-table">
+            <thead><tr><th>Metric</th><th>July</th><th>Prior Period</th></tr></thead>
+            <tbody>
+              <tr><td>Average CSAT</td><td>4.72</td><td>4.84</td></tr>
+              <tr><td>First response time</td><td>3h 48m</td><td>7h 46m</td></tr>
+              <tr><td>Resolution time</td><td>17h 04m</td><td>1d 22h</td></tr>
+              <tr><td>Messages per ticket</td><td>5.88</td><td>5.74</td></tr>
+            </tbody>
+          </table>
+          <div class="section-meta" style="font-size:12px;margin-top:6px;">First response/resolution times above are Gorgias's own dashboard calculation. Ticket-level raw averages run higher (~6h FRT, ~1d resolution) — same gap seen every week this month, most likely a mean-vs-median difference on Gorgias's side.</div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Channel Breakdown (customer-initiated, n=1,067)</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Email</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">837</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram DM</span><div class="bar-track"><div class="bar-fill dim" style="width:17%"></div></div><span class="bar-count">144</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram Comment</span><div class="bar-track"><div class="bar-fill dim" style="width:5%"></div></div><span class="bar-count">39</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram Mention</span><div class="bar-track"><div class="bar-fill dim" style="width:3%"></div></div><span class="bar-count">28</span></div>
+            <div class="bar-row"><span class="bar-label">Instagram Ad Comment</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">14</span></div>
+            <div class="bar-row"><span class="bar-label">Facebook Messenger</span><div class="bar-track"><div class="bar-fill dim" style="width:0.4%"></div></div><span class="bar-count">3</span></div>
+            <div class="bar-row"><span class="bar-label">Facebook Mention</span><div class="bar-track"><div class="bar-fill dim" style="width:0.2%"></div></div><span class="bar-count">2</span></div>
+          </div>
+          <div class="alert alert-blue" style="margin-top:8px;">Email = 78% of real customer contacts across July.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHY CUSTOMERS CONTACT -->
+    <div class="section" id="contacts">
+      <div class="section-header">
+        <div class="section-name">Why Customers Contact Us</div>
+        <div class="section-meta">827 actionable tickets, full month</div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Top 20 Sub-Categories (of 43 total, actionable only)</div>
+        <div class="bars-block">
+          <div class="bar-row"><span class="bar-label">Tracking Information</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">160</span></div>
+          <div class="bar-row"><span class="bar-label">Missing Gift</span><div class="bar-track"><div class="bar-fill dim" style="width:33%"></div></div><span class="bar-count">53</span></div>
+          <div class="bar-row"><span class="bar-label">Too Small</span><div class="bar-track"><div class="bar-fill red" style="width:26%"></div></div><span class="bar-count">41</span></div>
+          <div class="bar-row"><span class="bar-label">Availability</span><div class="bar-track"><div class="bar-fill dim" style="width:23%"></div></div><span class="bar-count">37</span></div>
+          <div class="bar-row"><span class="bar-label">Cancellation Request</span><div class="bar-track"><div class="bar-fill dim" style="width:23%"></div></div><span class="bar-count">36</span></div>
+          <div class="bar-row"><span class="bar-label">No Longer Needed</span><div class="bar-track"><div class="bar-fill dim" style="width:22%"></div></div><span class="bar-count">35</span></div>
+          <div class="bar-row"><span class="bar-label">Edit Order</span><div class="bar-track"><div class="bar-fill dim" style="width:20%"></div></div><span class="bar-count">32</span></div>
+          <div class="bar-row"><span class="bar-label">Order Confirmation</span><div class="bar-track"><div class="bar-fill dim" style="width:18%"></div></div><span class="bar-count">28</span></div>
+          <div class="bar-row"><span class="bar-label">Faulty Clasp</span><div class="bar-track"><div class="bar-fill dim" style="width:14%"></div></div><span class="bar-count">22</span></div>
+          <div class="bar-row"><span class="bar-label">Shipping Policy</span><div class="bar-track"><div class="bar-fill dim" style="width:9%"></div></div><span class="bar-count">15</span></div>
+          <div class="bar-row"><span class="bar-label">Delivery Failed</span><div class="bar-track"><div class="bar-fill dim" style="width:9%"></div></div><span class="bar-count">15</span></div>
+          <div class="bar-row"><span class="bar-label">When Will It Be Shipped?</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">13</span></div>
+          <div class="bar-row"><span class="bar-label">Exceed Delivery Timeframe</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">13</span></div>
+          <div class="bar-row"><span class="bar-label">Delivered But Not Received</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">12</span></div>
+          <div class="bar-row"><span class="bar-label">Length or Size</span><div class="bar-track"><div class="bar-fill dim" style="width:7%"></div></div><span class="bar-count">11</span></div>
+          <div class="bar-row"><span class="bar-label">Promotion</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">10</span></div>
+          <div class="bar-row"><span class="bar-label">Item</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">9</span></div>
+          <div class="bar-row"><span class="bar-label">Toolkit</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">7</span></div>
+          <div class="bar-row"><span class="bar-label">Instructions / Guide</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">7</span></div>
+          <div class="bar-row"><span class="bar-label">Customer Misuse</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">6</span></div>
+        </div>
+        <div style="padding:8px 14px;font-size:12px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);">Plus 23 more categories totaling 72 mentions (Unsubscribe, Faulty Toolkit, Forgot to Apply Discount, Low Quality, Battery, Color, Too Big, and others at 1–6 each). Excludes Agent Follow-up, Social Media, Feedback &amp; Suggestions, and Collab/Company/Feedback tags entirely. 827 actionable tickets total across 43 sub-categories.</div>
+      </div>
+    </div>
+
+    <!-- CSAT -->
+    <div class="section" id="csat">
+      <div class="section-header">
+        <div class="section-name">Customer Satisfaction</div>
+        <div class="section-meta">59 responses, full month · avg 4.71 (ticket-level) / 4.72 (dashboard)</div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Weekly CSAT Trend</div>
+        <table class="block-table">
+          <thead><tr><th>Week</th><th>Avg Score</th><th>Responses</th></tr></thead>
+          <tbody>
+            <tr><td>Week 1 (Jul 1–7)</td><td>4.5</td><td>12</td></tr>
+            <tr><td>Week 2 (Jul 8–14)</td><td>4.55</td><td>11</td></tr>
+            <tr><td>Week 3 (Jul 15–21)</td><td><strong>4.92</strong></td><td>12</td></tr>
+            <tr><td>Week 4 (Jul 22–31)</td><td>4.79</td><td>24</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RETURNS -->
+    <div class="section" id="returns">
+      <div class="section-header">
+        <div class="section-name">Return Analysis</div>
+        <div class="section-meta">182 requests · 8.52% return rate (182 of 2,137 orders)</div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Return Rate</div>
+        <table class="block-table">
+          <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Orders placed, July</td><td>2,137</td></tr>
+            <tr><td>Return requests, July</td><td>182</td></tr>
+            <tr><td><strong>Return rate</strong></td><td><strong>8.52%</strong> <span style="font-size:12px;color:var(--text-muted);">(182 ÷ 2,137)</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two-col">
+        <div class="block">
+          <div class="block-label">Return Reasons — Categorized (full month)</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Too Small</span><div class="bar-track"><div class="bar-fill red" style="width:100%"></div></div><span class="bar-count">92</span></div>
+            <div class="bar-row"><span class="bar-label">Doesn't Suit / Style</span><div class="bar-track"><div class="bar-fill dim" style="width:30%"></div></div><span class="bar-count">28</span></div>
+            <div class="bar-row"><span class="bar-label">Quality / Looks Cheap</span><div class="bar-track"><div class="bar-fill dim" style="width:17%"></div></div><span class="bar-count">16</span></div>
+            <div class="bar-row"><span class="bar-label">Too Big</span><div class="bar-track"><div class="bar-fill dim" style="width:12%"></div></div><span class="bar-count">11</span></div>
+            <div class="bar-row"><span class="bar-label">Style/Design Not As Expected</span><div class="bar-track"><div class="bar-fill dim" style="width:11%"></div></div><span class="bar-count">10</span></div>
+            <div class="bar-row"><span class="bar-label">Arrived Late</span><div class="bar-track"><div class="bar-fill dim" style="width:9%"></div></div><span class="bar-count">8</span></div>
+            <div class="bar-row"><span class="bar-label">No Detail Given</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">7</span></div>
+            <div class="bar-row"><span class="bar-label">Band/Clasp Issue</span><div class="bar-track"><div class="bar-fill dim" style="width:5%"></div></div><span class="bar-count">5</span></div>
+            <div class="bar-row"><span class="bar-label">Defective</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">4</span></div>
+            <div class="bar-row"><span class="bar-label">No Longer Needed</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">4</span></div>
+            <div class="bar-row"><span class="bar-label">Wanted Different Style/Color</span><div class="bar-track"><div class="bar-fill dim" style="width:3%"></div></div><span class="bar-count">3</span></div>
+            <div class="bar-row"><span class="bar-label">Never Arrived</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Customer Ordering Error</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Personal Circumstance</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Already Have One</span><div class="bar-track"><div class="bar-fill dim" style="width:2%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Missing Mystery Gift</span><div class="bar-track"><div class="bar-fill dim" style="width:1%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Billing Dispute Claim</span><div class="bar-track"><div class="bar-fill dim" style="width:1%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Damaged In Transit</span><div class="bar-track"><div class="bar-fill dim" style="width:1%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Changed Mind</span><div class="bar-track"><div class="bar-fill dim" style="width:1%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Wrong Color/Variant</span><div class="bar-track"><div class="bar-fill dim" style="width:1%"></div></div><span class="bar-count">1</span></div>
+          </div>
+          <div class="section-meta" style="font-size:12px;margin-top:6px;">201 reason mentions across 182 requests, combined from all four weekly reports with category names harmonized for a clean monthly total.</div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Most Returned Products (full month)</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Aurea Watch - Gold</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">36</span></div>
+            <div class="bar-row"><span class="bar-label">Oceana Watch - Gold Wave</span><div class="bar-track"><div class="bar-fill dim" style="width:72%"></div></div><span class="bar-count">26</span></div>
+            <div class="bar-row"><span class="bar-label">Oceana Watch - Midnight</span><div class="bar-track"><div class="bar-fill dim" style="width:42%"></div></div><span class="bar-count">15</span></div>
+            <div class="bar-row"><span class="bar-label">Muse Watch - Gold</span><div class="bar-track"><div class="bar-fill dim" style="width:39%"></div></div><span class="bar-count">14</span></div>
+            <div class="bar-row"><span class="bar-label">Solis Watch - Duo Tone</span><div class="bar-track"><div class="bar-fill dim" style="width:39%"></div></div><span class="bar-count">14</span></div>
+            <div class="bar-row"><span class="bar-label">Solis Watch - Gold</span><div class="bar-track"><div class="bar-fill dim" style="width:36%"></div></div><span class="bar-count">13</span></div>
+            <div class="bar-row"><span class="bar-label">Oceana Watch - Blue Tide</span><div class="bar-track"><div class="bar-fill dim" style="width:36%"></div></div><span class="bar-count">13</span></div>
+            <div class="bar-row"><span class="bar-label">Aurea Watch - Silver</span><div class="bar-track"><div class="bar-fill dim" style="width:31%"></div></div><span class="bar-count">11</span></div>
+            <div class="bar-row"><span class="bar-label">Alure Watch - Gold</span><div class="bar-track"><div class="bar-fill dim" style="width:28%"></div></div><span class="bar-count">10</span></div>
+            <div class="bar-row"><span class="bar-label">Oceana Watch - Silver Wave</span><div class="bar-track"><div class="bar-fill dim" style="width:22%"></div></div><span class="bar-count">8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFUNDS -->
+    <div class="section" id="refunds">
+      <div class="section-header">
+        <div class="section-name">Refund Summary</div>
+        <div class="section-meta">$32,211.57 · 253 orders · 270 transactions</div>
+      </div>
+
+      <div class="block">
+        <div class="block-label">Refund Rate</div>
+        <table class="block-table">
+          <thead><tr><th>Metric</th><th>July</th><th>Benchmark</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Refund activity rate</td><td><strong>12.25%</strong><div style="font-size:12px;color:var(--text-muted);">253 refunded orders / 2,065 revenue orders created</div></td><td>3–8%</td><td><span class="status-pill pill-red"><span class="dot dot-red"></span>Above benchmark</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two-col">
+        <div class="block">
+          <div class="block-label">Refund Breakdown</div>
+          <table class="block-table">
+            <thead><tr><th>Week</th><th>Cash Refunded</th></tr></thead>
+            <tbody>
+              <tr><td>Week 1 (Jul 1–7)</td><td>$8,904.50</td></tr>
+              <tr><td>Week 2 (Jul 8–14)</td><td>$8,681.87</td></tr>
+              <tr><td>Week 3 (Jul 15–21)</td><td>$6,707.52</td></tr>
+              <tr><td>Week 4 (Jul 22–31, 10d)</td><td>$7,917.68</td></tr>
+              <tr><td><strong>July total</strong></td><td><strong>$32,211.57</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Most Refunded Items (full month)</div>
+          <div class="bars-block">
+            <div class="bar-row"><span class="bar-label">Oceana Watch</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-count">153</span></div>
+            <div class="bar-row"><span class="bar-label">Toolkit</span><div class="bar-track"><div class="bar-fill dim" style="width:27%"></div></div><span class="bar-count">41</span></div>
+            <div class="bar-row"><span class="bar-label">Mystery Gift</span><div class="bar-track"><div class="bar-fill dim" style="width:26%"></div></div><span class="bar-count">40</span></div>
+            <div class="bar-row"><span class="bar-label">Aurea Watch</span><div class="bar-track"><div class="bar-fill dim" style="width:23%"></div></div><span class="bar-count">35</span></div>
+            <div class="bar-row"><span class="bar-label">Solis Watch</span><div class="bar-track"><div class="bar-fill dim" style="width:18%"></div></div><span class="bar-count">28</span></div>
+            <div class="bar-row"><span class="bar-label">Muse Watch</span><div class="bar-track"><div class="bar-fill dim" style="width:10%"></div></div><span class="bar-count">15</span></div>
+            <div class="bar-row"><span class="bar-label">Alure Watch</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">13</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FREE ORDER REPLACEMENT LOSS -->
+    <div class="section" id="promo">
+      <div class="section-header">
+        <div class="section-name">Free Order Replacement Loss</div>
+        <div class="section-meta">72 free orders · $3,404.46 recorded loss</div>
+      </div>
+      <div class="block">
+        <table class="block-table">
+          <thead><tr><th>Item</th><th class="right">Amount</th></tr></thead>
+          <tbody>
+            <tr><td>Free orders (count)</td><td class="right">72</td></tr>
+            <tr><td>Configured product COGS</td><td class="right">$2,316.46</td></tr>
+            <tr><td>Seller-paid shipping</td><td class="right">$1,088.00</td></tr>
+            <tr><td>Fees / custom expenses</td><td class="right">$0.00</td></tr>
+            <tr><td><strong>Total recorded loss</strong></td><td class="right"><strong>$3,404.46</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="section-meta" style="font-size:12px;margin-top:6px;">≈ $47.28 per free order. Definition: $0-revenue orders created in July (no fulfillment or discount-type filter).</div>
+      </div>
+    </div>
+
+    <!-- DISPUTES -->
+    <div class="section" id="disputes">
+      <div class="section-header">
+        <div class="section-name">Chargebacks & Disputes</div>
+        <div class="section-meta">6 Shopify Payments · 12 AirWallex · 2 PayPal</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Shopify Payments (full month)</div>
+        <table class="block-table">
+          <thead><tr><th>Order</th><th>Reason</th><th>Status</th><th>Initiated</th><th>Evidence Sent</th><th>Finalized</th><th class="right">Amount</th></tr></thead>
+          <tbody>
+            <tr><td>#128798</td><td>Product not received</td><td>Lost</td><td>Jul 5</td><td>Jul 10</td><td>Jul 16</td><td class="right">$125.10</td></tr>
+            <tr><td>#128471</td><td>Product not received</td><td>Lost</td><td>Jul 8</td><td>Jul 21</td><td>Jul 29</td><td class="right">$128.52</td></tr>
+            <tr><td>#128851</td><td>Product unacceptable</td><td>Under review</td><td>Jul 9</td><td>Jul 21</td><td>—</td><td class="right">$118.57</td></tr>
+            <tr><td>#127556</td><td>Credit not processed</td><td>Lost</td><td>Jul 17</td><td>Jul 21</td><td>Jul 29</td><td class="right">$220.33</td></tr>
+            <tr><td>#129679</td><td>Product not received</td><td>Lost</td><td>Jul 19</td><td>Jul 23</td><td>Jul 31</td><td class="right">$157.42</td></tr>
+            <tr><td>#130166</td><td>Fraudulent</td><td>Won</td><td>Jul 26</td><td>Jul 28</td><td>Aug 1</td><td class="right">$155.68</td></tr>
+            <tr><td colspan="6"><strong>Total</strong></td><td class="right"><strong>$905.62</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="section-meta" style="font-size:12px;margin-top:6px;">4 lost, 1 won, 1 still under review. "Product not received" is the most common reason (3 of 6).</div>
+      </div>
+
+      <div class="block" style="margin-top:10px;">
+        <div class="block-label">AirWallex (full month, from dispute dashboard export)</div>
+        <table class="block-table">
+          <thead><tr><th>Response Due</th><th>Amount</th><th>Reason</th><th>Type</th><th>Status</th><th>Last Updated</th></tr></thead>
+          <tbody>
+            <tr><td>Jul 13</td><td>112.00 GBP</td><td>Product not received</td><td>Chargeback</td><td>Won</td><td>Jul 4</td></tr>
+            <tr><td>Jul 26</td><td>114.00 GBP</td><td>Product not received</td><td>RFI</td><td>Expired</td><td>Jul 26</td></tr>
+            <tr><td>Jul 27</td><td>112.00 GBP</td><td>Cancelled product</td><td>Chargeback</td><td>Lost</td><td>Jul 14</td></tr>
+            <tr><td>Jul 27</td><td>101.40 GBP</td><td>Cancelled product</td><td>Chargeback</td><td>Won</td><td>Jul 14</td></tr>
+            <tr><td>Aug 4</td><td>117.61 EUR</td><td>Cancelled product</td><td>RFI</td><td>Requires response</td><td>Jul 14</td></tr>
+            <tr><td>Aug 9</td><td>113.00 GBP</td><td>Product not received</td><td>RFI</td><td>Reversed</td><td>Jul 29</td></tr>
+            <tr><td>Aug 13</td><td>974.00 DKK</td><td>Product not received</td><td>RFI</td><td>Requires response</td><td>Jul 23</td></tr>
+            <tr><td>Aug 14</td><td>103.20 GBP</td><td>Cancelled product</td><td>RFI</td><td>Expired</td><td>Jul 24</td></tr>
+            <tr><td>Aug 14</td><td>97.20 GBP</td><td>Cancelled product</td><td>Chargeback</td><td>Won</td><td>Aug 1</td></tr>
+            <tr><td>Aug 21</td><td>103.20 GBP</td><td>Cancelled product</td><td>RFI</td><td>Requires response</td><td>Jul 31</td></tr>
+            <tr><td>Aug 21</td><td>131.90 EUR</td><td>Cancelled product</td><td>RFI</td><td>Expired</td><td>Jul 31</td></tr>
+            <tr><td>Aug 21</td><td>1,470.00 NOK</td><td>Cancelled product</td><td>RFI</td><td>Requires response</td><td>Jul 31</td></tr>
+          </tbody>
+        </table>
+        <div class="section-meta" style="font-size:12px;margin-top:6px;">12 disputes total: 3 won, 1 lost, 4 requiring response (not yet due), 3 expired without a response, 1 reversed. Not split by week — the export's "Last Updated" field doesn't reliably map to a single dispute-creation week (for open cases it appears to reflect creation date, but for resolved/expired cases it reflects the resolution or expiry date instead), so this is presented as one July-wide log rather than risking an inaccurate weekly split.</div>
+      </div>
+
+      <div class="block" style="margin-top:10px;">
+        <div class="block-label">PayPal</div>
+        <div class="bars-block" style="padding:12px 14px;font-size:13px;color:var(--text-dim);">2 disputes across July.</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<footer>Nuamōre &nbsp;·&nbsp; July 2026 Monthly Report &nbsp;·&nbsp; Internal use only</footer>
+
+</body>
+</html>

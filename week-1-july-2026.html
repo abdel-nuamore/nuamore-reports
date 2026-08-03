@@ -150,7 +150,7 @@
   /* ── BAR ── */
   .bar-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--border-light); }
   .bar-row:last-child { border-bottom: none; }
-  .bar-label { font-size: 13px; color: var(--text); min-width: 200px; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-label { font-size: 13px; color: var(--text); min-width: 230px; max-width: 230px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bar-label.narrow { min-width: 140px; max-width: 140px; }
   .bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
   .bar-fill { height: 100%; border-radius: 3px; background: var(--brand-text); }
@@ -409,16 +409,18 @@
         <div class="block">
           <div class="block-label">Return Reasons — Categorized</div>
           <div class="bars-block">
-            <div class="bar-row"><span class="bar-label">Too Small</span><div class="bar-track"><div class="bar-fill red" style="width:100%"></div></div><span class="bar-count">17</span></div>
-            <div class="bar-row"><span class="bar-label">Looks Different to Image</span><div class="bar-track"><div class="bar-fill red" style="width:94%"></div></div><span class="bar-count">16</span></div>
-            <div class="bar-row"><span class="bar-label">Too Big</span><div class="bar-track"><div class="bar-fill dim" style="width:29%"></div></div><span class="bar-count">5</span></div>
-            <div class="bar-row"><span class="bar-label">Doesn't Suit / Fit Right</span><div class="bar-track"><div class="bar-fill dim" style="width:18%"></div></div><span class="bar-count">3</span></div>
-            <div class="bar-row"><span class="bar-label">Band/Clasp Hard to Open</span><div class="bar-track"><div class="bar-fill dim" style="width:18%"></div></div><span class="bar-count">3</span></div>
-            <div class="bar-row"><span class="bar-label">Personal Circumstance</span><div class="bar-track"><div class="bar-fill dim" style="width:12%"></div></div><span class="bar-count">2</span></div>
-            <div class="bar-row"><span class="bar-label">Arrived Late</span><div class="bar-track"><div class="bar-fill dim" style="width:12%"></div></div><span class="bar-count">2</span></div>
-            <div class="bar-row"><span class="bar-label">Quality Dissatisfaction</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">1</span></div>
-            <div class="bar-row"><span class="bar-label">Never Arrived</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">1</span></div>
-            <div class="bar-row"><span class="bar-label">Billing Dispute Claim</span><div class="bar-track"><div class="bar-fill dim" style="width:6%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Too Small</span><div class="bar-track"><div class="bar-fill red" style="width:100%"></div></div><span class="bar-count">26</span></div>
+            <div class="bar-row"><span class="bar-label">Too Big</span><div class="bar-track"><div class="bar-fill dim" style="width:19%"></div></div><span class="bar-count">5</span></div>
+            <div class="bar-row"><span class="bar-label">Doesn't Suit / Fit Right</span><div class="bar-track"><div class="bar-fill dim" style="width:12%"></div></div><span class="bar-count">3</span></div>
+            <div class="bar-row"><span class="bar-label">Style / Design Not As Expected</span><div class="bar-track"><div class="bar-fill dim" style="width:12%"></div></div><span class="bar-count">3</span></div>
+            <div class="bar-row"><span class="bar-label">Band/Clasp Hard to Open</span><div class="bar-track"><div class="bar-fill dim" style="width:12%"></div></div><span class="bar-count">3</span></div>
+            <div class="bar-row"><span class="bar-label">Personal Circumstance</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Arrived Late</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Quality Dissatisfaction</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">No Detail Given</span><div class="bar-track"><div class="bar-fill dim" style="width:8%"></div></div><span class="bar-count">2</span></div>
+            <div class="bar-row"><span class="bar-label">Missing Mystery Gift</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Never Arrived</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">1</span></div>
+            <div class="bar-row"><span class="bar-label">Billing Dispute Claim</span><div class="bar-track"><div class="bar-fill dim" style="width:4%"></div></div><span class="bar-count">1</span></div>
           </div>
         </div>
 
@@ -440,54 +442,54 @@
         <table class="block-table">
           <thead><tr><th>Date</th><th>Product</th><th>Tagged Reason</th><th>Customer's Description</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td class="muted">Too Big</td><td class="muted">Face of watch is larger than expected.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">I do not like the design of the watch. It's not as it appeared online.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Oceana - Blue Tide; Oceana - Gold Wave</td><td class="muted">Other</td><td class="muted">Too difficult to open band (both items)</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Oceana - Silver Wave</td><td class="muted">Too Small</td><td class="muted">Unfortunately the watch is too small.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">New, not used</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Aurea - Rose Gold</td><td class="muted">Too Small</td><td class="muted">The watch face is tiny compared to what is advertised.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Alure - Gold; Alure - Silver</td><td class="muted">Too Small</td><td class="muted">Too small; It's a lot smaller than I thought.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Muse - Duo Tone</td><td class="muted">Looks Different</td><td class="muted">Looks different on my wrist vs. pictures, specially the belt. Also no mystery gift was sent.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">The watch is much smaller than it looks on the site.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Midnight</td><td class="muted">Too Small</td><td class="muted">The watch is just too small.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Muse - Gold</td><td class="muted">Looks Different</td><td class="muted">The feel and quality of the watch feels different.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Sage</td><td class="muted">Too Big</td><td class="muted">Too large for my wrist.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Midnight</td><td class="muted">Other</td><td class="muted">Never arrived.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Gold Wave</td><td class="muted">Other</td><td class="muted">I did not like it on me.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Blue Tide</td><td class="muted">Too Small</td><td class="muted">Too small, not the same as the photo advertised.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">Face ended up smaller/rounder than expected; hoped for a larger, more square vintage shape.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Silver Wave; Oceana - Gold Wave</td><td class="muted">Too Small</td><td class="muted">Face size (both items)</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">Do not like the style of watch.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 2</td><td>Aurea - Gold</td><td class="muted">Too Small</td><td class="muted">Watch is way smaller than I expected.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 3</td><td>Oceana - Gold Wave</td><td class="muted">Other</td><td class="muted">Didn't like the way it adjusts / fits on my wrist.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 3</td><td>Aurea - Silver</td><td class="muted">Looks Different</td><td class="muted">It's a lot smaller than it looks online.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 3</td><td>Aurea - Gold</td><td class="muted">Looks Different</td><td class="muted">Very small compared to web description.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 3</td><td>Aurea - Silver</td><td class="muted">Looks Different</td><td class="muted">Smaller than anticipated — thought it was the same size as my previous one.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 4</td><td>Alure - Duo Tone</td><td class="muted">Too Big</td><td class="muted">Band too long, links not removable; also wants toolkit refunded, mystery gift never received.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 4</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different (DE)</td><td class="muted">"Uhr" (watch) — no further detail given.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 4</td><td>Oceana - Gold Wave</td><td class="muted">Too Small</td><td class="muted">Beautiful watch, but strap far too short for a large wrist; doesn't want to extend further.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 4</td><td>Muse - Gold</td><td class="muted">Other</td><td class="muted">Wants to exchange for the choco Solis — Muse is much smaller than expected.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 5</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">The watch is smaller than it appears on the site.</td><td class="muted">Resolved</td></tr>
-            <tr><td>Jul 5</td><td>Aurea - Gold</td><td class="muted">Looks Different</td><td class="muted">Much smaller than presented.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 5</td><td>Aurea - Gold</td><td class="muted">Looks Different</td><td class="muted">Much smaller presence on wrist than expected.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 5</td><td>Oceana - Blue Tide</td><td class="muted">Other</td><td class="muted">Were gifts for nieces, but they love their Apple Watches and travel a lot.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 5</td><td>Oceana - Blue Tide</td><td class="muted">Too Small</td><td class="muted">Great watch, but smaller than I'm looking for.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 5</td><td>Solis - Duo Tone</td><td class="muted">Other</td><td class="muted">"Never ordered repair kit... this is a scam." — billing dispute, worth a direct look.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 6</td><td>Oceana - Gold Wave</td><td class="muted">Arrived Late</td><td class="muted">Replacement order — requested to return.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 6</td><td>Oceana - Gold Wave</td><td class="muted">Other</td><td class="muted">I don't like the quality.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 6</td><td>Solis - Gold</td><td class="muted">Too Small</td><td class="muted">Watch is too small / watch face is too small.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 6</td><td>Oceana - Gold Wave</td><td class="muted">Other</td><td class="muted">Not what I expected and it just doesn't suit me.</td><td class="muted">Rejected</td></tr>
-            <tr><td>Jul 7</td><td>Alure - Gold</td><td class="muted">Looks Different</td><td class="muted">Did not like the clasp on the bracelet.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Oceana - Midnight</td><td class="muted">Other</td><td class="muted">Too big, doesn't like the style on a small wrist — returning to buy a different watch.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Alure - Gold</td><td class="muted">Other</td><td class="muted">Cannot remove links on watch when sizing.</td><td class="muted">Resolved (Exchange)</td></tr>
-            <tr><td>Jul 7</td><td>Oceana - Midnight</td><td class="muted">Doesn't Fit (DE)</td><td class="muted">"Leider passt das nicht so gut zu meinem Schmuck" (doesn't go well with my jewelry)</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Oceana - Gold Wave</td><td class="muted">Too Small</td><td class="muted">Thought the face would be a little bigger; cannot read the date at all.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Aurea - Gold</td><td class="muted">Too Small</td><td class="muted">Watch face is much smaller than thought — expected same size as a Cartier.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Oceana - Gold Wave</td><td class="muted">Other</td><td class="muted">Bought for a gift, but the person passed away.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Oceana - Midnight</td><td class="muted">Other</td><td class="muted">Feels too big, wants something more delicate — would like to exchange for a different style.</td><td class="muted">Rejected</td></tr>
-            <tr><td>Jul 7</td><td>Solis - Blue Silver</td><td class="muted">Too Small</td><td class="muted">Looks much larger in photos; trying to replace an Apple/Garmin watch, couldn't read it as an everyday watch.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Alure - Gold</td><td class="muted">Arrived Late</td><td class="muted">Please refund.</td><td class="muted">Approved</td></tr>
-            <tr><td>Jul 7</td><td>Oceana - Gold Wave</td><td class="muted">Looks Different</td><td class="muted">Face is so small, not like advertised.</td><td class="muted">Approved</td></tr>
+            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td>Too Big</td><td>Face of watch is larger than expected.</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>I do not like the design of the watch. It's not as it appeared online.</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Oceana - Blue Tide; Oceana - Gold Wave</td><td>Other</td><td>Too difficult to open band (both items)</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Oceana - Silver Wave</td><td>Too Small</td><td>Unfortunately the watch is too small.</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>New, not used</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Aurea - Rose Gold</td><td>Too Small</td><td>The watch face is tiny compared to what is advertised.</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Alure - Gold; Alure - Silver</td><td>Too Small</td><td>Too small; It's a lot smaller than I thought.</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Muse - Duo Tone</td><td>Looks Different</td><td>Looks different on my wrist vs. pictures, specially the belt. Also no mystery gift was sent.</td><td>Approved</td></tr>
+            <tr><td>Jul 1</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>The watch is much smaller than it looks on the site.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Midnight</td><td>Too Small</td><td>The watch is just too small.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Muse - Gold</td><td>Looks Different</td><td>The feel and quality of the watch feels different.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Sage</td><td>Too Big</td><td>Too large for my wrist.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Midnight</td><td>Other</td><td>Never arrived.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Gold Wave</td><td>Other</td><td>I did not like it on me.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Blue Tide</td><td>Too Small</td><td>Too small, not the same as the photo advertised.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>Face ended up smaller/rounder than expected; hoped for a larger, more square vintage shape.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Silver Wave; Oceana - Gold Wave</td><td>Too Small</td><td>Face size (both items)</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>Do not like the style of watch.</td><td>Approved</td></tr>
+            <tr><td>Jul 2</td><td>Aurea - Gold</td><td>Too Small</td><td>Watch is way smaller than I expected.</td><td>Approved</td></tr>
+            <tr><td>Jul 3</td><td>Oceana - Gold Wave</td><td>Other</td><td>Didn't like the way it adjusts / fits on my wrist.</td><td>Approved</td></tr>
+            <tr><td>Jul 3</td><td>Aurea - Silver</td><td>Looks Different</td><td>It's a lot smaller than it looks online.</td><td>Approved</td></tr>
+            <tr><td>Jul 3</td><td>Aurea - Gold</td><td>Looks Different</td><td>Very small compared to web description.</td><td>Approved</td></tr>
+            <tr><td>Jul 3</td><td>Aurea - Silver</td><td>Looks Different</td><td>Smaller than anticipated — thought it was the same size as my previous one.</td><td>Approved</td></tr>
+            <tr><td>Jul 4</td><td>Alure - Duo Tone</td><td>Too Big</td><td>Band too long, links not removable; also wants toolkit refunded, mystery gift never received.</td><td>Approved</td></tr>
+            <tr><td>Jul 4</td><td>Oceana - Gold Wave</td><td>Looks Different (DE)</td><td>"Uhr" (watch) — no further detail given.</td><td>Approved</td></tr>
+            <tr><td>Jul 4</td><td>Oceana - Gold Wave</td><td>Too Small</td><td>Beautiful watch, but strap far too short for a large wrist; doesn't want to extend further.</td><td>Approved</td></tr>
+            <tr><td>Jul 4</td><td>Muse - Gold</td><td>Other</td><td>Wants to exchange for the choco Solis — Muse is much smaller than expected.</td><td>Approved</td></tr>
+            <tr><td>Jul 5</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>The watch is smaller than it appears on the site.</td><td>Resolved</td></tr>
+            <tr><td>Jul 5</td><td>Aurea - Gold</td><td>Looks Different</td><td>Much smaller than presented.</td><td>Approved</td></tr>
+            <tr><td>Jul 5</td><td>Aurea - Gold</td><td>Looks Different</td><td>Much smaller presence on wrist than expected.</td><td>Approved</td></tr>
+            <tr><td>Jul 5</td><td>Oceana - Blue Tide</td><td>Other</td><td>Were gifts for nieces, but they love their Apple Watches and travel a lot.</td><td>Approved</td></tr>
+            <tr><td>Jul 5</td><td>Oceana - Blue Tide</td><td>Too Small</td><td>Great watch, but smaller than I'm looking for.</td><td>Approved</td></tr>
+            <tr><td>Jul 5</td><td>Solis - Duo Tone</td><td>Other</td><td>"Never ordered repair kit... this is a scam." — billing dispute, worth a direct look.</td><td>Approved</td></tr>
+            <tr><td>Jul 6</td><td>Oceana - Gold Wave</td><td>Arrived Late</td><td>Replacement order — requested to return.</td><td>Approved</td></tr>
+            <tr><td>Jul 6</td><td>Oceana - Gold Wave</td><td>Other</td><td>I don't like the quality.</td><td>Approved</td></tr>
+            <tr><td>Jul 6</td><td>Solis - Gold</td><td>Too Small</td><td>Watch is too small / watch face is too small.</td><td>Approved</td></tr>
+            <tr><td>Jul 6</td><td>Oceana - Gold Wave</td><td>Other</td><td>Not what I expected and it just doesn't suit me.</td><td>Rejected</td></tr>
+            <tr><td>Jul 7</td><td>Alure - Gold</td><td>Looks Different</td><td>Did not like the clasp on the bracelet.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Oceana - Midnight</td><td>Other</td><td>Too big, doesn't like the style on a small wrist — returning to buy a different watch.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Alure - Gold</td><td>Other</td><td>Cannot remove links on watch when sizing.</td><td>Resolved (Exchange)</td></tr>
+            <tr><td>Jul 7</td><td>Oceana - Midnight</td><td>Doesn't Fit (DE)</td><td>"Leider passt das nicht so gut zu meinem Schmuck" (doesn't go well with my jewelry)</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Oceana - Gold Wave</td><td>Too Small</td><td>Thought the face would be a little bigger; cannot read the date at all.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Aurea - Gold</td><td>Too Small</td><td>Watch face is much smaller than thought — expected same size as a Cartier.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Oceana - Gold Wave</td><td>Other</td><td>Bought for a gift, but the person passed away.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Oceana - Midnight</td><td>Other</td><td>Feels too big, wants something more delicate — would like to exchange for a different style.</td><td>Rejected</td></tr>
+            <tr><td>Jul 7</td><td>Solis - Blue Silver</td><td>Too Small</td><td>Looks much larger in photos; trying to replace an Apple/Garmin watch, couldn't read it as an everyday watch.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Alure - Gold</td><td>Arrived Late</td><td>Please refund.</td><td>Approved</td></tr>
+            <tr><td>Jul 7</td><td>Oceana - Gold Wave</td><td>Looks Different</td><td>Face is so small, not like advertised.</td><td>Approved</td></tr>
           </tbody>
         </table>
       </div>
@@ -506,7 +508,7 @@
           <thead><tr><th>Metric</th><th>Jul 1–7</th><th>May Monthly</th><th>Benchmark</th><th>Status</th></tr></thead>
           <tbody>
             <tr><td>vs Revenue (cash refunded)</td><td><strong>18.89%</strong><div style="font-size:12px;color:var(--text-muted);">$8,904.50 / $47,144.02</div></td><td>4.81%</td><td>3–8%</td><td><span class="status-pill pill-red"><span class="dot dot-red"></span>Well above benchmark</span></td></tr>
-            <tr><td>Orders with cash refunds</td><td><strong>68</strong></td><td>—</td><td>—</td><td class="muted">Total order count not available this week</td></tr>
+            <tr><td>Orders with cash refunds</td><td><strong>68</strong></td><td>—</td><td>—</td><td>Total order count not available this week</td></tr>
           </tbody>
         </table>
       </div>
@@ -570,7 +572,7 @@
         <table class="block-table">
           <thead><tr><th>Order</th><th>Reason</th><th>Status</th><th>Initiated</th><th>Evidence Sent</th><th>Finalized</th><th class="right">Amount</th></tr></thead>
           <tbody>
-            <tr><td>#128798</td><td>Product not received</td><td class="muted">Lost</td><td>Jul 5</td><td>Jul 10</td><td>Jul 16</td><td class="right">$125.10</td></tr>
+            <tr><td>#128798</td><td>Product not received</td><td>Lost</td><td>Jul 5</td><td>Jul 10</td><td>Jul 16</td><td class="right">$125.10</td></tr>
           </tbody>
         </table>
       </div>
